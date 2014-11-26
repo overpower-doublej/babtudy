@@ -1,0 +1,1 @@
+"/home/jun/github/babtudy/server/src/app.ts" "/home/jun/github/babtudy/server/src/config.ts" "/home/jun/github/babtudy/server/src/gcm/send.ts" "/home/jun/github/babtudy/server/src/route/index.ts" "/home/jun/github/babtudy/server/src/route/reg/index.ts" --removeComments --target ES5 --module commonjs
