@@ -23,10 +23,10 @@ import config = require('./config');
 
 var app = express();
 
+app.enable('trust proxy');      // To get real ip
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.enable('trust proxy');      // To get real ip
 
 // Setup loggers
 // For console, use morgan logger
