@@ -1,0 +1,75 @@
+params	: 요청 변수
+return	: 즉시 되돌아오는 서버로부터의 응답
+req	: (request) 서버가 다른 사용자들에게 하는 행동
+res	: (response) 나중에 서버가 사용자에게 보내는 PUSH 메세지
+
+- 밥터디 모집글(post)
+
+GET	/post			[]	밥터디 모집글들을 불러옴(10개)
+	return	모집글 10개
+
+GET	/post/:ISOstring	[]	해당 시간 이후의 게시글 10개를 불러옴
+	return	모집글 10개
+
+POST	/post			{}	밥터디 모집글 등록
+	return	status, code
+	res	신청자 알림
+
+DELETE	/post			{}	밥터디 모집글 삭제
+	return	status
+
+POST	/post/:postId		{}	해당 id 모집글 편집
+	return	status
+
+POST	/post/:postId/menu	{}	해당 id 모집글에 메뉴(뭐먹을지) 건의
+	return	status
+	req	밥터디 멤버들에게 건의
+	res	투표 결과
+
+POST	/post/:postId/place	{}	해당 id 모집글에 장소(어디서 만날지) 건의
+	return	status
+	req	밥터디 멤버들에게 건의
+	res	투표 결과
+
+POST	/post/:postId/code	{}	해당 id 모집글의 사용자들 코드를 전송해 만났다는걸 검증
+	params	{ userId, [{ otherUserId, code }, {}, {}, ...] }
+
+POST	/post/:postId/acs	{}	밥터디 참가 신청. 새로운 access 레코드 생성
+	params	userId
+	return	status
+	req	밥터디 그룹 멤버들에게 참가 요청 메세지 전송
+	res	신청 결과, 수락했다면 code
+
+GET	/post/:postId/acs/:acsId{}	해당 참가신청 기록 조회
+	return	userInfo
+
+POST	/post/:postId/acs/:acsId{}	수락/거절
+	params	userId, agree
+	return	status
+	req	만약 투표가 끝났으면 신청자에게 결과 전송
+	res	신청 결과, 수락했다면 밥룸 업데이트
+
+
+
+- 사용자(user)
+POST	/user			{}	사용자 등록
+	return	status
+
+GET	/user/:userId		{}	사용자 정보 불러오기
+	return	사용자 정보
+
+POST	/user/:userId		{}	사용자 정보 편집
+	return	status
+
+DELETE	/user/:userId		{}	사용자 삭제
+	return status
+
+
+
+- 채팅(chat)
+GET	/chat/:chatId		[]	해당 id 채팅방의 최근대화 30개 가져오기
+	return	대화 30개
+
+POST	/chat/:chatId		{}	해당 id 채팅방에 메세지 전송
+	return	status
+	req	밥터디 그룹의 멤버들에게 메세지 전송

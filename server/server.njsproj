@@ -66,6 +66,7 @@
     <TypeScriptCompile Include="src\app.ts" />
     <TypeScriptCompile Include="src\mongo\log.ts" />
     <TypeScriptCompile Include="src\mongo\mongo.ts" />
+    <TypeScriptCompile Include="src\mongo\post.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />
     <TypeScriptCompile Include="src\route\reg\index.ts" />
   </ItemGroup>
