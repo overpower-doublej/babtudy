@@ -2,7 +2,7 @@
 /// <reference path="../scripts/typings/node/node.d.ts" />
 /// <reference path="../scripts/typings/winston/winston.d.ts" />
 
-console.log('App started');
+console.log('###########################################################');
 console.log(new Date());
 
 // node modules
