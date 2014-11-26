@@ -33,6 +33,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="bobtudy-routes.txt" />
     <Content Include="makefile" />
     <Content Include="Scripts\typings\node\node.d.ts" />
     <Content Include=".gitignore" />
@@ -42,6 +43,7 @@
     <Content Include="src\gcm\send.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="mongo_shell\" />
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
     <Folder Include="Scripts\typings\express-4.x\" />
@@ -53,10 +55,14 @@
     <Folder Include="src\gcm\" />
     <Folder Include="src\mongo\" />
     <Folder Include="src\route\" />
+    <Folder Include="src\route\chat\" />
+    <Folder Include="src\route\user\" />
+    <Folder Include="src\route\post\" />
     <Folder Include="src\route\reg\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gruntfile.js" />
+    <Compile Include="mongo_shell\sample.js" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\typings\express-4.x\express.d.ts" />
@@ -67,6 +73,7 @@
     <TypeScriptCompile Include="src\mongo\log.ts" />
     <TypeScriptCompile Include="src\mongo\mongo.ts" />
     <TypeScriptCompile Include="src\mongo\post.ts" />
+    <TypeScriptCompile Include="src\mongo\schema.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />
     <TypeScriptCompile Include="src\route\reg\index.ts" />
   </ItemGroup>
