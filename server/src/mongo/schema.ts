@@ -45,7 +45,6 @@ class User {
     dept: string;           // 학과
     stuId: string;          // 학번
     info: Text;             // 자기소개
-    regId: string;          // registration_id for GCM
 }
 
 class Chat {
