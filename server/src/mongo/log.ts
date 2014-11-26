@@ -1,4 +1,6 @@
-﻿import mongodb = require('mongodb');
+﻿/// <reference path="../../Scripts/typings/extend/extend.d.ts" />
+
+import mongodb = require('mongodb');
 import extend = require('extend');
 import mongo = require('./mongo');
 
