@@ -33,7 +33,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Makefile" />
+    <Content Include="makefile" />
     <Content Include="Scripts\typings\node\node.d.ts" />
     <Content Include=".gitignore" />
     <Content Include="package.json" />
@@ -45,10 +45,12 @@
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
     <Folder Include="Scripts\typings\express-4.x\" />
+    <Folder Include="Scripts\typings\mongodb\" />
     <Folder Include="Scripts\typings\node\" />
     <Folder Include="Scripts\typings\winston\" />
     <Folder Include="src\" />
     <Folder Include="src\gcm\" />
+    <Folder Include="src\mongo\" />
     <Folder Include="src\route\" />
     <Folder Include="src\route\reg\" />
   </ItemGroup>
@@ -57,8 +59,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\typings\express-4.x\express.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\mongodb\mongodb.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\winston\winston.d.ts" />
     <TypeScriptCompile Include="src\app.ts" />
+    <TypeScriptCompile Include="src\mongo\log.ts" />
+    <TypeScriptCompile Include="src\mongo\mongo.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />
     <TypeScriptCompile Include="src\route\reg\index.ts" />
   </ItemGroup>

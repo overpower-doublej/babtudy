@@ -12,6 +12,11 @@ var config = {
     },
     gcm: {
         SERVER_ACCESS_KEY: 'AIzaSyD8d4J6MnN1htX2XxSjFl9BVWOb-txMPJc'
+    },
+    mongo: {
+        url: 'mongodb://localhost:27017/',
+        dbList: ['babtudy'],
+        connectionTimeout: 3000
     }
 }
 

@@ -20,6 +20,7 @@ var winstonMongo = require('winston-mongodb').MongoDB;
 
 // my modules
 import config = require('./config');
+import mongo = require('./mongo/mongo');
 
 var app = express();
 
@@ -58,9 +59,12 @@ app.use(expressWinston.errorLogger({
     ]
 }));
 
-// Start listening
-app.listen(config.port, () => {
-    console.log('Web server started at port ' + config.port);
+// Connect mongodb
+mongo.connect(() => {
+    // Start listening
+    app.listen(config.port, () => {
+        console.log('Web server started at port ' + config.port);
+    });
 });
 
 module.exports = app;
