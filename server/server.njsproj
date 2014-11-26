@@ -45,6 +45,7 @@
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
     <Folder Include="Scripts\typings\express-4.x\" />
+    <Folder Include="Scripts\typings\extend\" />
     <Folder Include="Scripts\typings\mongodb\" />
     <Folder Include="Scripts\typings\node\" />
     <Folder Include="Scripts\typings\winston\" />
@@ -59,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\typings\express-4.x\express.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\extend\extend.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\mongodb\mongodb.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\winston\winston.d.ts" />
     <TypeScriptCompile Include="src\app.ts" />
