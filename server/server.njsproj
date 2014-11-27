@@ -76,6 +76,7 @@
     <TypeScriptCompile Include="src\mongo\schema.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />
     <TypeScriptCompile Include="src\route\reg\index.ts" />
+    <TypeScriptCompile Include="src\route\user\index.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
   <ProjectExtensions>

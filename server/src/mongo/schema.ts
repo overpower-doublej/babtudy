@@ -12,6 +12,7 @@ class Post {
     users: ObjectID[];      // 참가한 사용자들의 id
     codes: Code;            // 사용자들의 인증 번호
     accesses: Access[];     // 참가 신청 목록
+    chat: Message[];        // 채팅
 
     _postedDate: Date;      // private 밥터디 참가 모집글을 올린 시간
 }
@@ -45,16 +46,11 @@ class User {
     dept: string;           // 학과
     stuId: string;          // 학번
     info: Text;             // 자기소개
-    regId: string;          // registration_id for GCM
-}
-
-class Chat {
-    _id: ObjectID;          // 기본키 Post._id 참조
-    msg: Message[];
+    regId: string[];        // registration_id for GCM
 }
 
 class Message {
-    _id: Date;              // Android에서 전송을 누른 시각
+    date: Date;              // Android에서 전송을 누른 시각
     msg: string;            // 메세지 내용
     userId: ObjectID;       // 사용자 id
 }
