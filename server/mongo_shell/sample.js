@@ -1,8 +1,7 @@
 ﻿use bobtudy
 
-db.user.drop();
-db.post.drop();
-db.chat.drop();
+// Drop database
+db.dropDatabase();
 
 // Random function
 function ran(num) {
@@ -52,7 +51,15 @@ var user4 = {
     regId: 'registration_id'
 };
 
-users.push(user0, user1, user2, user3, user4);
+var user5 = {
+    name: '권혁윤',
+    dept: '법도수호자',
+    stuId: '???',
+    info: '자기소개 입니당. 만나서 반갑습니당.',
+    regId: 'registration_id'
+}
+
+users.push(user0, user1, user2, user3, user4, user5);
 
 users.forEach(function (user) {
     db.user.insert(user);
@@ -70,6 +77,7 @@ var post1 = {
     users: [],
     codes: {},
     accesses: [],
+    chat: [],
     _postedDate: new Date()
 };
 
@@ -81,8 +89,9 @@ for (var i = 0; i < 3; i++) {
     post1.codes[userIdStr] = ran(10000).toString();
 }
 
+// accesses
 var access1 = {
-    _id: new ObjectId(),
+    _id: new Date(),
     userId: users[4]._id,
     votes: {},
     result: undefined
@@ -96,45 +105,43 @@ access1.result = false;
 post1.accesses.push(access1);
 
 var access2 = {
-    _id: new ObjectId(),
+    _id: new Date(),
     userId: users[3]._id,
-    votes: {},
-    result: undefined
+    votes: {}
 };
 
 access2.votes[users[0]._id.str] = true;
 access2.votes[users[1]._id.str] = true;
+access2.votes[users[2]._id.str] = true;
 
 access2.result = true;
 
 post1.accesses.push(access2);
 
-db.post.insert(post1);
-post1 = db.post.findOne();
-
-db.post.update({_id: post1._id, 'accesses._id': post1.accesses[1]._id}, {$set: {'accesses.$.votes.' +users[2]._id.str : {} }})
-access2.votes[users[2]._id.str] = true;
-
-var chat1 = {
-    _id: post1._id,
-    msg: []
+var access3 = {
+    _id: new Date(),
+    userId: users[5]._id,
+    votes: {}
 };
 
+access3.votes[users[0]._id.str] = true;
+
+post1.accesses.push(access3);
+
+// chat
 for (var i = 0; i < ran(100); i++) {
     var date = new Date();
     date.setHours(i);
     var msg = {
-        _id: date,
+        date: date,
         msg: 'message ' + i,
         userId: users[ran(3)]._id
     };
-    chat1.msg.push(msg);
+    post1.chat.push(msg);
 }
 
-db.chat.insert(chat1);
 
-db.user.find().pretty();
-db.post.find().pretty();
-db.chat.find().pretty();
+db.post.insert(post1);
+db.post.findOne();
 
-chat1 = db.chat.findOne();
+

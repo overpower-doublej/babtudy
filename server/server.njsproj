@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Gruntfile.js" />
+    <Compile Include="mongo_shell\access_query.js" />
     <Compile Include="mongo_shell\sample.js" />
   </ItemGroup>
   <ItemGroup>

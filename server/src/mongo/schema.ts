@@ -26,7 +26,7 @@ class Code {        // "userId": "4-digit key"
 }
 
 class Access {
-    _id: ObjectID;          // 기본키
+    _id: Date;              // 기본키
     userId: ObjectID;       // 참가 신청한 사용자 id
     votes: Vote;            // 밥터디 멤버들의 투표 결과
     result: boolean;        // 최종 투표결과. 찬성이면 true, 반대면 false 이다. 아직 투표가 끝나지 않았다면 undefined
