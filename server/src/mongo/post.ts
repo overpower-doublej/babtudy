@@ -1,60 +1,93 @@
 ﻿import mongodb = require('mongodb');
-import ObjectID = mongodb.ObjectID;
+import extend = require('extend');
+import mongo = require('./mongo');
+import config = require('../config');
+import schema = require('./schema');
+import User = schema.User;
+import Post = schema.Post;
 
-class Post {
-    _id: ObjectID;      // mongodb primary key
-    title: string;       // 제목
-    date: Date;          // 언제 먹을지
-    menu: string;       // 메뉴
-    place: string;      // 장소
-    content: Text;
+var dbName = 'bobtudy';
+var collName = 'post';
 
-    users: User[];  // users
-    codes: Code;
-    accesses: Access[];
+var db: mongodb.Db;
+var post: mongodb.Collection;
 
-    _postDate: Date;
+/**
+ * 모집글 10개를 불러옴.
+ */
+export function fetch(callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
+    if (typeof sortByPostedDate != 'boolean')
+        sortByPostedDate = false;
+
+    var sort: string;
+
+    if (sortByPostedDate)
+        sort = 'postedDate';
+    else
+        sort = 'date';
+
+    post.find({},
+        {
+            title: 1,
+            date: 1,
+            postedDate: 1,
+            menu: 1
+        },
+        {
+            limit: 10,
+            sort: sort
+        }).toArray((err, results) => {
+            if (err) return console.error(err);
+            callback(results);
+        });
 }
 
-class Code {
-    user1: string;
-    user2: string;
-    user3: string;
-    user4: string;
-    userMore: string;
+export function fetchWhen(date: Date, callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
+    if (typeof sortByPostedDate != 'boolean')
+        sortByPostedDate = false;
+
+    var sort: string;
+    var selector = {};
+
+    if (sortByPostedDate)
+        sort = 'postedDate'
+    else
+        sort = 'date';
+
+    selector[sort] = { $gt: date }; // {date: {$gt: date}} or {postedDate: {$gt: date}}
+
+    post.find(selector,
+        {
+            title: 1,
+            date: 1,
+            postedDate: 1,
+            menu: 1
+        },
+        {
+            limit: 10,
+            sort: sort
+        }).toArray((err, results) => {
+            if (err) return console.error(err);
+            callback(results);
+        });
 }
 
-class Access {
-    _id: ObjectID;
-    userId: ObjectID;               // refernces User._id
-    votes: Vote;
-    result: boolean;                // If accepted true, else if declined false, else if vote did not finish yet, undefined
+export function insert(newPost: Post, callback: (result) => void) {
+    post.insert(newPost, { w: 1 }, (err, result) => {
+        if (err) return console.dir(err);
+        callback(result);
+    });
 }
 
-class Vote {
-    user1: boolean;
-    user2: boolean;
-    user3: boolean;
-    user4: boolean;
-    userMore: boolean;
-}
 
-class User {
-    _id: ObjectID;
-    name: string;
-    dept: string;
-    stuId: string;
-    info: Text;
-}
 
-class Chat {
-    _id: ObjectID;
-    postId: ObjectID;
-    msg: Message[];
-}
 
-class Message {
-    _id: Date;
-    msg: string;
-    userId: ObjectID;
-}
+// connect to bobtudy db
+mongo.getDb(dbName, (_db) => {
+    db = _db;
+    db.collection(collName, (err, coll) => {
+        if (err) return console.dir(err);
+        // get collection post
+        post = coll;
+    });
+});

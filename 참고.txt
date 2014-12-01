@@ -1,0 +1,1 @@
+sqlite blob: DB에 이미지 저장

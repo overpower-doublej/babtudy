@@ -1,37 +1,43 @@
 ﻿import express = require('express');
-import send = require('../../gcm/send');
+import extend = require('extend');
+import db = require('../../mongo/user');
+import schema = require('../../mongo/schema');
+import User = schema.User;
 
 var router = express.Router();
 router
     .post('/', (req, res, next) => {
+        var _id = req.body['_id'];
+        var pwd = req.body['pwd'];
         var name = req.body['name'];
         var dept = req.body['dept'];
         var stuId = req.body['stuId'];
         var info = req.body['info'];
         var regId = req.body['regId'];
-    })
-    .post('/', (req, res, next) => {
-        // registration id
-        var regId = req.body['regId'];
 
-        console.log('New registeration!');
-
-        // Response for HTTP POST
-        res.json({
-            msg: 'Thanks for your registration!',
-            date: new Date().toString()
-        });
-        // Setup message for GCM
-        var msg = {
-            msg: 'New Message!',
-            date: new Date().toString()
+        var data = {
+            _id: _id,
+            name: name,
+            pwd: pwd,
+            dept: dept,
+            stuId: stuId,
+            info: info,
+            regId: regId
         };
-        // Send GCM
-        send(regId, msg, (result) => {
-            console.log('Google Cloud Message sended');
-            console.log(msg);
-            console.log(result);
+
+        var newUser = new User(data);
+
+        db.insert(newUser, (result) => {
+            res.json(result);
         });
-    });
+    })
+// Parse parameter 'id', insert user data into req.user
+    .param('id', (req, res, next, _id) => {
+        db.findById(_id, (user) => {
+            req.user = user;
+            next();
+        });
+    })
+    .use('/:id', require('./id/index'));
 
 export = router;

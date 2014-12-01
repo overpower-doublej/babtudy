@@ -5,10 +5,16 @@ res	: (response) 나중에 서버가 사용자에게 보내는 PUSH 메세지
 
 - 밥터디 모집글(post)
 
-GET		/post						[]	밥터디 모집글들을 불러옴(10개)
+GET		/post						[]	밥터디 모집글들을 불러옴(10개). 가장 약속시간이 가까운 밥터디순
 		return	모집글 10개
 
 GET		/post/:ISOstring			[]	해당 시간 이후의 게시글 10개를 불러옴
+		return	모집글 10개
+
+GET		/post/pt					[]	밥터디 모집글들을 불러옴(10개). 최신 등록순(posted time)
+		return	모집글 10개
+
+GET		/post/pt/:ISOstring			[]	해당 시간 이후의 게시글 10개를 불러옴
 		return	모집글 10개
 
 POST	/post						{}	밥터디 모집글 등록

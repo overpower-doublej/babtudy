@@ -15,7 +15,7 @@ var config = {
     },
     mongo: {
         url: 'mongodb://localhost:27017/',
-        dbList: ['babtudy'],
+        dbList: ['bobtudy'],
         connectionTimeout: 3000
     }
 }

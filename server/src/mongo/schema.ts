@@ -1,56 +1,75 @@
-﻿import mongodb = require('mongodb');
+﻿import extend = require('extend');
+import mongodb = require('mongodb');
 import ObjectID = mongodb.ObjectID;
 
-class Post {
+export class Post {
     _id: ObjectID;          // 기본키
     title: string;          // 제목
     date: Date;             // 언제 먹을지
+    postedDate: Date;       // 글을 올린 시간
     menu: string;           // 메뉴
     place: string;          // 장소
     content: Text;          // 내용
+    boss: string;           // 방장
 
-    users: ObjectID[];      // 참가한 사용자들의 id
-    codes: Code;            // 사용자들의 인증 번호
+    users: string[];        // 참가한 사용자들의 id
     accesses: Access[];     // 참가 신청 목록
     chat: Message[];        // 채팅
+    attend: Object;         // 출석 {userId: boolean}
 
-    _postedDate: Date;      // private 밥터디 참가 모집글을 올린 시간
+    /**
+     * If '_id' is specified, this Post object is created by existing document.
+     * Else, this object is used when insert new document into Post collection.
+     */
+    constructor(data: any, _id?: string) {
+        // Create new Post
+        if (_id == undefined) {
+            delete data._id;
+            extend(this, data);
+
+            this.postedDate = new Date();
+            this.users = [];
+            this.accesses = [];
+            this.chat = [];
+            this.attend = {};
+
+            this.users.push(this.boss);
+        }
+        // From existing document
+        else {
+            extend(this, data);
+        }
+    }
 }
 
-class Code {        // "userId": "4-digit key"
-    user1: string;
-    user2: string;
-    user3: string;
-    user4: string;
-    userMore: string;
-}
-
-class Access {
-    _id: Date;              // 기본키
+export class Access {
+    _id: ObjectID;          // 기본키
     userId: ObjectID;       // 참가 신청한 사용자 id
-    votes: Vote;            // 밥터디 멤버들의 투표 결과
+    votes: Object;          // 밥터디 멤버들의 투표 결과 {userId: boolean}
+    date: Date;             // 신청 날짜
     result: boolean;        // 최종 투표결과. 찬성이면 true, 반대면 false 이다. 아직 투표가 끝나지 않았다면 undefined
 }
 
-class Vote {        // "userId": boolean
-    user1: boolean;
-    user2: boolean;
-    user3: boolean;
-    user4: boolean;
-    userMore: boolean;
-}
-
-class User {
-    _id: ObjectID;          // 기본키
+export class User {
+    _id: string;            // 기본키, 사용자가 회원가입할때 입력한 ID
+    pwd: string;            // 비밀번호
     name: string;           // 사용자 이름
     dept: string;           // 학과
     stuId: string;          // 학번
     info: Text;             // 자기소개
     regId: string[];        // registration_id for GCM
+    meetLog: number[];      // [나온횟수, 총만나기로한횟수] ex)사용자가 10번중 7번 나왔으면 [7, 10]
+
+    constructor(data?: Object) {
+        if (typeof data != 'object')
+            data = {};
+
+        extend(this, data);
+    }
 }
 
-class Message {
+export class Message {
     date: Date;              // Android에서 전송을 누른 시각
     msg: string;            // 메세지 내용
-    userId: ObjectID;       // 사용자 id
+    userId: string;       // 사용자 id
 }

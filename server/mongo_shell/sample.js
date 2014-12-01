@@ -2,6 +2,7 @@
 
 // Drop database
 db.dropDatabase();
+db.user.ensureIndex({stuId: 1}, {unique: true});
 
 // Random function
 function ran(num) {
@@ -54,7 +55,7 @@ var user4 = {
 var user5 = {
     name: '권혁윤',
     dept: '법도수호자',
-    stuId: '???',
+    stuId: '2012440058',
     info: '자기소개 입니당. 만나서 반갑습니당.',
     regId: 'registration_id'
 }
