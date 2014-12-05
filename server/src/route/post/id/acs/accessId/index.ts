@@ -27,28 +27,31 @@ router
         var userId = req.body['userId'];
         var vote = req.body['vote'];
 
-        console.log(post);
-        console.log(access);
-
         // Update vote data
         dbPost.updateVote(post._id, access._id, userId, vote, (result) => {
-            if (result)
-                res.json({ success: 1, failure: 0 });
-            else
-                res.json({ success: 0, failure: 1 });
-
             // Did everyone vote?
             dbPost.findAccess(post._id, access._id, (access) => {
                 for (var userId in access.votes) {
                     var vote = access.votes[userId];
                     // If someone didn't vote yet, return
                     if (vote == null)
-                        return;
+                        return res.json({ success: 1, failure: 0, msg: 'Vote did not finish yet' });
                 }
-                console.log('everyone finished vote!!'.green);
+                // If vote finished, send GCM, and update result on access
                 dbUser.findRegIds(post.users, (regIds) => {
-                    gcm.se
+                    var data = {
+                        postId: post._id,
+                        acsId: access._id
+                    };
+                    var gcmMsg = new gcm.GcmMsg(CODE.VOTE_FINISH, data);
+                    gcm.send(regIds, gcmMsg, (result) => {
+                        if (result.success)
+                            res.json({ success: 1, failure: 0, msg: 'Vote finished' });
+                        else if (result.failure)
+                            res.json({ success: 0, failure: 1, msg: 'GCM send failure' });
+                    });
                 });
+                dbPost.setVoteResult
             });
         });
     });

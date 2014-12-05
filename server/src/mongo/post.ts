@@ -18,7 +18,7 @@ var post: mongodb.Collection;
 /**
  * 모집글 10개를 불러옴.
  */
-export function find(callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
+export function find(callback: (err, results: any[]) => void, sortByPostedDate?: boolean): void {
     if (typeof sortByPostedDate != 'boolean')
         sortByPostedDate = false;
 
@@ -40,8 +40,8 @@ export function find(callback: (results: any[]) => void, sortByPostedDate?: bool
             limit: 10,
             sort: sort
         }).toArray((err, results) => {
-            if (err) return console.error(err);
-            callback(results);
+            if (err) console.error(err);
+            callback(err, results);
         });
 }
 
@@ -75,8 +75,13 @@ export function findWhen(date: Date, callback: (results: any[]) => void, sortByP
         });
 }
 
-export function findById(_id: string, callback: (err, result: Post) => void) {
-    post.findOne({ _id: new ObjectID(_id) }, (err, result) => {
+export function findById(_id: string, callback: (err, result: Post) => void);
+export function findById(_id: ObjectID, callback: (err, result: Post) => void);
+export function findById(_id: any, callback: (err, result: Post) => void) {
+    if (typeof _id == 'string')
+        _id = new ObjectID(_id);
+
+    post.findOne({ _id: _id }, (err, result) => {
         callback(err, result);
     });
 }
@@ -134,6 +139,21 @@ export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string,
     var userVoteKey = 'accesses.$.votes.' + userId;
     var doc = { $set: {} };
     doc.$set[userVoteKey] = vote;
+    // Update
+    post.update(selector, doc, { w: 1 }, (err, result) => {
+        if (err) return console.error(err);
+        callback(result);
+    });
+}
+
+export function setVoteResult(postId: ObjectID, accessId: ObjectID, result: boolean, callback: (result) => void) {
+    // Set query
+    var selector = {
+        _id: postId,
+        'accesses._id': accessId
+    };
+    // Set replacement document
+    var doc = { $set: { 'accesses.$.result': result } };
     // Update
     post.update(selector, doc, { w: 1 }, (err, result) => {
         if (err) return console.error(err);

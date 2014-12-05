@@ -14,7 +14,7 @@ var db: mongodb.Db;
 var user: mongodb.Collection;
 
 export function findById(_id: string, callback: (user: User) => void) {
-    user.findOne({ _id: new ObjectId(_id) }, (err, result) => {
+    user.findOne({ _id: _id }, (err, result) => {
         if (err) return console.error(err);
 
         callback(result);

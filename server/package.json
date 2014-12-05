@@ -28,6 +28,7 @@
         "node-gcm": "~0.9.12",
 
         "should": "~4.3.0",
+        "superagent": "~0.21.0",
         "supertest": "~0.15.0",
         "mocha": "~2.0.1",
 

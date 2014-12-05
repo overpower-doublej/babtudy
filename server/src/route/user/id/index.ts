@@ -36,7 +36,20 @@ router
         db.update(new User(updatedUser), (result) => {
             res.json(result);
         });
+    })
+    .post('/login', (req, res, next) => {
+        var user: User = req.user;
+        console.log(req.body);
+        var pwd = req.body['pwd'];
 
+        db.findById(user._id, (user) => {
+            if (user.pwd == pwd)
+                res.json({ success: 1, failure: 0 });
+            else if (user.pwd != pwd)
+                res.json({ success: 0, failure: 1, msg: 'Incorrect password' });
+            else
+                res.json({ success: 0, failure: 1, msg: 'User ID does not exist' });
+        });
     });
 
 export = router;

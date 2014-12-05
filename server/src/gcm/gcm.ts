@@ -22,7 +22,7 @@ export interface IGCMSendReturnMsg {
     results: Object[];
 }
 
-export function send(regIds: string[], msg: Object, callback: (result: IGCMSendReturnMsg) => void) {
+export function send(regIds: string[], msg: GcmMsg, callback: (result: IGCMSendReturnMsg) => void) {
     // Create a message
     var gcmMsg = new gcm.Message({
         collapseKey: Math.round(Math.random() * 10).toString(),     // Must be string

@@ -2,9 +2,6 @@
 /// <reference path="../Scripts/typings/node/node.d.ts" />
 /// <reference path="../Scripts/typings/winston/winston.d.ts" />
 
-console.log('###########################################################');
-console.log(new Date());
-
 // node modules
 import fs = require('fs');
 import path = require('path');

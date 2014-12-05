@@ -27,12 +27,17 @@ router
             var gcmMsg = new gcm.GcmMsg(CODE.ACCESS_JOIN, { userId: userId });
             // Send GCM
             gcm.send(regIds, gcmMsg, (result) => {
+                /**
+                 * ########################## DELETE HERE
+                 */
+                result.failure = 0;
+                result.success = 1;
+
                 if (result.failure)
                     res.json({
-                        code: CODE.ACCESS_JOIN,
                         success: 0,
                         failure: 1,
-                        data: {}
+                        msg: 'GCM fail'
                     });
                 else if (result.success) {
                     // Create new Access object
@@ -45,13 +50,17 @@ router
                         });
                     });
                 }
+                else
+                    res.json({
+                        success: 0,
+                        failure: 1
+                    });
             });
         });
     })
     .param('acsId', (req, res, next, acsId: string) => {
         var post: Post = req['post'];
         dbPost.findAccess(post._id, acsId, (access) => {
-            console.log(access);
             req['acs'] = access;
             next();
         });

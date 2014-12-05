@@ -7,23 +7,26 @@ import Post = schema.Post;
 var router = express.Router();
 router
     .get('/', (req, res, next) => {
-        db.find((results) => {
-            res.json(results);
+        db.find((err, results) => {
+            if (err)
+                res.json({ success: 0, failure: 1, msg: 'Internal server failure' });
+            else
+                res.json({ success: 1, failure: 0, data: results });
         });
     })
     .post('/', (req, res, next) => {
         var b = req.body;
 
-        var title = b.title;
-        var date = b.date;
-        var menu = b.menu;
-        var place = b.place;
-        var content = b.content;
-        var boss = b.boss;
+        var title = b['title'];
+        var date = b['date'];
+        var menu = b['menu'];
+        var place = b['place'];
+        var content = b['content'];
+        var boss = b['boss'];
 
         var data = {
             title: title,
-            date: date,
+            date: new Date(date),
             menu: menu,
             place: place,
             content: content,
@@ -31,14 +34,13 @@ router
         };
 
         var newPost = new Post(data);
-        console.log(newPost);
+
         // Insert into mongodb
         db.insert(newPost, (err, result) => {
-            console.log(result);
             if (err)
-                res.json({ msg: 'error' });
+                res.json({ success: 0, failure: 1, msg: 'Internal server fail' });
             else
-                res.json(result);
+                res.json({ success: 1, failure: 0, data: result });
         });
     })
     .param('id', (req, res, next, _id) => {
