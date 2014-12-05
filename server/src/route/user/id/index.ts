@@ -7,7 +7,11 @@ import User = schema.User;
 var router = express.Router();
 router
     .get('/', (req, res, next) => {
-        res.json(req.user);
+        var user = {
+            _id: req.user._id,
+            name: req.user.name
+        };
+        res.json(user);
     })
     .post('/', (req, res, next) => {
         var oldUser = req.user;

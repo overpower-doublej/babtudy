@@ -1,19 +1,16 @@
 ﻿import express = require('express');
 import extend = require('extend');
-import db = require('../../../mongo/user');
+import dbUser = require('../../../mongo/user');
+import dbPost = require('../../../mongo/post');
 import schema = require('../../../mongo/schema');
+import Post = schema.Post;
 import User = schema.User;
 import Access = schema.Access;
+import gcm = require('../../../gcm/gcm');
+import CODE = require('../../../gcm/pushCode');
 
 var router = express.Router();
 router
-    .post('/acs', (req, res, next) => {
-        var post = req['post'];
-        console.log(post);
-        var userId = req.body.userId;
-
-        var newAcs = new Access(userId, post);
-        res.json(newAcs);
-    });
+    .use('/acs', require('./acs/index'));
 
 export = router;

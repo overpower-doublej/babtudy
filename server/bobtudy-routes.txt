@@ -50,7 +50,7 @@ GET		/post/:postId/acs/:acsId	{}	해당 참가신청 기록 조회
 		return	userInfo
 
 POST	/post/:postId/acs/:acsId	{}	수락/거절
-		params	userId, agree
+		params	userId, vote
 		return	status
 		req	만약 투표가 끝났으면 신청자에게 결과 전송
 		res	신청 결과, 수락했다면 밥룸 업데이트

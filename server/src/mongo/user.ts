@@ -21,6 +21,26 @@ export function findById(_id: string, callback: (user: User) => void) {
     })
 }
 
+export function findRegIds(userIds: string[], callback: (regIds: string[]) => void) {
+    var selector = {
+        $or: []
+    };
+    userIds.forEach((userId) => {
+        selector.$or.push({ _id: userId });
+    });
+
+    user.find(selector, { regId: 1 }).toArray((err, results: { _id: string; regId: string }[]) => {
+        if (err) return console.error(err);
+
+        var regIds = [];
+        results.forEach((result) => {
+            regIds.push(result.regId);
+        });
+
+        callback(regIds);
+    });
+}
+
 export function insert(newUser: User, callback: (result) => void) {
     user.insert(newUser, { w: 1 }, (err, result) => {
         if (err) return console.dir(err);

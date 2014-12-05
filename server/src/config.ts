@@ -11,7 +11,8 @@ var config = {
         }
     },
     gcm: {
-        SERVER_ACCESS_KEY: 'AIzaSyD8d4J6MnN1htX2XxSjFl9BVWOb-txMPJc'
+        SERVER_ACCESS_KEY: 'AIzaSyD8d4J6MnN1htX2XxSjFl9BVWOb-txMPJc',
+        NumOfSendRetry: 4
     },
     mongo: {
         url: 'mongodb://localhost:27017/',

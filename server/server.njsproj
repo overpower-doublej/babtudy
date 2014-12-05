@@ -40,12 +40,17 @@
     <Content Include="package.json" />
     <Content Include="README.md" />
     <Content Include="src\config.ts" />
-    <Content Include="src\gcm\send.ts" />
+    <Content Include="src\gcm\gcm.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="mongo_shell\" />
+    <Folder Include="Scripts\typings\colors\" />
     <Folder Include="Scripts\typings\should\" />
+    <Folder Include="Scripts\typings\supertest\" />
     <Folder Include="src\route\post\id\" />
+    <Folder Include="src\route\post\id\acs\" />
+    <Folder Include="src\route\post\id\acs\accessId\" />
+    <Folder Include="src\route\post\id\chat\" />
     <Folder Include="src\route\user\id\" />
     <Folder Include="test\" />
     <Folder Include="Scripts\" />
@@ -61,7 +66,6 @@
     <Folder Include="src\route\" />
     <Folder Include="src\route\user\" />
     <Folder Include="src\route\post\" />
-    <Folder Include="src\route\reg\" />
     <Folder Include="test\mongo\" />
     <Folder Include="test\route\" />
     <Folder Include="test\route\post\" />
@@ -73,24 +77,29 @@
     <Compile Include="mongo_shell\sample.js" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\typings\colors\colors.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\express-4.x\express.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\extend\extend.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\mongodb\mongodb.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\should\should.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\supertest\supertest.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\winston\winston.d.ts" />
     <TypeScriptCompile Include="src\app.ts" />
-    <TypeScriptCompile Include="src\mongo\log.ts" />
+    <TypeScriptCompile Include="src\gcm\pushCode.ts" />
+    <TypeScriptCompile Include="src\mongo\gcm.ts" />
     <TypeScriptCompile Include="src\mongo\mongo.ts" />
     <TypeScriptCompile Include="src\mongo\post.ts" />
     <TypeScriptCompile Include="src\mongo\schema.ts" />
     <TypeScriptCompile Include="src\mongo\user.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />
+    <TypeScriptCompile Include="src\route\post\id\acs\accessId\index.ts" />
+    <TypeScriptCompile Include="src\route\post\id\acs\index.ts" />
     <TypeScriptCompile Include="src\route\post\id\index.ts" />
     <TypeScriptCompile Include="src\route\post\index.ts" />
-    <TypeScriptCompile Include="src\route\reg\index.ts" />
     <TypeScriptCompile Include="src\route\user\id\index.ts" />
     <TypeScriptCompile Include="src\route\user\index.ts" />
     <TypeScriptCompile Include="test\mongo\user.spec.ts" />
+    <TypeScriptCompile Include="test\route\index.spec.ts" />
     <TypeScriptCompile Include="test\route\post\index.spec.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />

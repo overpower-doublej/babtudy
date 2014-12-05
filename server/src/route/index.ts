@@ -9,7 +9,6 @@ router
         });
     })
     .use('/user', require('./user/index'))
-    .use('/post', require('./post/index'))
-    .use('/reg', require('./reg/index'));
+    .use('/post', require('./post/index'));
 
 export = router;

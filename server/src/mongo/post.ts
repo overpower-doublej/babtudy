@@ -6,6 +6,7 @@ import config = require('../config');
 import schema = require('./schema');
 import User = schema.User;
 import Post = schema.Post;
+import Access = schema.Access;
 
 var dbName = 'bobtudy';
 var collName = 'post';
@@ -13,16 +14,11 @@ var collName = 'post';
 var db: mongodb.Db;
 var post: mongodb.Collection;
 
-export function findById(_id: string, callback: (err, result: Post) => void) {
-    post.findOne({ _id: new ObjectID(_id) }, (err, result) => {
-        callback(err, result);
-    });
-}
 
 /**
  * 모집글 10개를 불러옴.
  */
-export function fetch(callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
+export function find(callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
     if (typeof sortByPostedDate != 'boolean')
         sortByPostedDate = false;
 
@@ -49,7 +45,7 @@ export function fetch(callback: (results: any[]) => void, sortByPostedDate?: boo
         });
 }
 
-export function fetchWhen(date: Date, callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
+export function findWhen(date: Date, callback: (results: any[]) => void, sortByPostedDate?: boolean): void {
     if (typeof sortByPostedDate != 'boolean')
         sortByPostedDate = false;
 
@@ -79,12 +75,71 @@ export function fetchWhen(date: Date, callback: (results: any[]) => void, sortBy
         });
 }
 
+export function findById(_id: string, callback: (err, result: Post) => void) {
+    post.findOne({ _id: new ObjectID(_id) }, (err, result) => {
+        callback(err, result);
+    });
+}
+
 export function insert(newPost: Post, callback: (err, result) => void) {
     post.insert(newPost, { w: 1 }, (err, result) => {
         callback(err, result);
     });
 }
 
+export function pushAccess(postId: ObjectID, access: Access, callback: (result) => void) {
+    post.update({ _id: postId }, { $push: { accesses: access } }, (err, result) => {
+        if (err) return console.error(err);
+        callback(result);
+    });
+}
+
+export function findAccess(postId: ObjectID, accessId: string, callback: (access: Access) => void);
+export function findAccess(postId: ObjectID, accessId: ObjectID, callback: (access: Access) => void)
+export function findAccess(postId: ObjectID, accessId: any, callback: (access: Access) => void) {
+    // Check argument
+    if (typeof accessId == 'string')
+        accessId = new ObjectID(accessId);
+    // Set aggregation pipeline stages
+    var stages = [
+        {
+            $match: { _id: postId }
+        },
+        {
+            $project: { _id: 0, accesses: 1 }
+        },
+        {
+            $unwind: '$accesses'
+        },
+        {
+            $match: { 'accesses._id': accessId }
+        }
+    ];
+    // Aggregate
+    post.aggregate(stages, (err, results: any[]) => {
+        if (err) return console.error(err);
+
+        var result = results[0].accesses;
+        callback(result);
+    });
+}
+
+export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string, vote: boolean, callback: (result) => void) {
+    // Set query
+    var selector = {
+        _id: postId,
+        'accesses._id': accessId
+    };
+    // Set replacement document
+    var userVoteKey = 'accesses.$.votes.' + userId;
+    var doc = { $set: {} };
+    doc.$set[userVoteKey] = vote;
+    // Update
+    post.update(selector, doc, { w: 1 }, (err, result) => {
+        if (err) return console.error(err);
+        callback(result);
+    });
+}
 
 
 

@@ -70,4 +70,4 @@ mongo.connect(() => {
     });
 });
 
-module.exports = app;
+export = app;

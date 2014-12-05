@@ -7,7 +7,7 @@ import Post = schema.Post;
 var router = express.Router();
 router
     .get('/', (req, res, next) => {
-        db.fetch((results) => {
+        db.find((results) => {
             res.json(results);
         });
     })
@@ -43,8 +43,11 @@ router
     })
     .param('id', (req, res, next, _id) => {
         db.findById(_id, (err, post) => {
+            /**
+             * Pass post object to next route handler.
+             * Usage: req['post']
+             */
             req['post'] = post;
-            console.log(post);
             next();
         });
     })
