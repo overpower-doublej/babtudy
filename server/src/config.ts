@@ -5,7 +5,7 @@ var config = {
     accessLogPath: path.join(__dirname, '../log', 'access.log'),
     winston: {
         mongo: {
-            dbName: 'babtudy',
+            dbName: 'bobtudy',
             accessLogCollName: 'accessLog',
             errLogCollName: 'errLog'
         }

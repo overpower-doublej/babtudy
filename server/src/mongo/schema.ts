@@ -1,4 +1,5 @@
-﻿import extend = require('extend');
+﻿/// <reference path="../../Scripts/typings/extend/extend.d.ts" />
+import extend = require('extend');
 import mongodb = require('mongodb');
 import ObjectID = mongodb.ObjectID;
 
@@ -44,10 +45,24 @@ export class Post {
 
 export class Access {
     _id: ObjectID;          // 기본키
-    userId: ObjectID;       // 참가 신청한 사용자 id
+    userId: string;       // 참가 신청한 사용자 id
     votes: Object;          // 밥터디 멤버들의 투표 결과 {userId: boolean}
     date: Date;             // 신청 날짜
     result: boolean;        // 최종 투표결과. 찬성이면 true, 반대면 false 이다. 아직 투표가 끝나지 않았다면 undefined
+
+    constructor(userId: string, post: Post) {
+        console.log(post);
+        this._id = new ObjectID();
+        this.userId = userId;
+        this.votes = {};
+        this.date = new Date();
+
+        post.users.forEach((user) => {
+            this.votes[user] = null;
+        });
+
+        delete this.result;
+    }
 }
 
 export class User {

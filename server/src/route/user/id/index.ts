@@ -1,5 +1,5 @@
-﻿import express = require('express');
-import extend = require('extend');
+﻿/// <reference path="../../../../Scripts/typings/express-4.x/express.d.ts" />
+import express = require('express');
 import db = require('../../../mongo/user');
 import schema = require('../../../mongo/schema');
 import User = schema.User;
@@ -28,7 +28,7 @@ router
             stuId: stuId,
             info: info
         };
-        
+
         db.update(new User(updatedUser), (result) => {
             res.json(result);
         });

@@ -1,4 +1,7 @@
-﻿import mongodb = require('mongodb');
+﻿/// <reference path="../../Scripts/typings/extend/extend.d.ts" />
+/// <reference path="../../Scripts/typings/mongodb/mongodb.d.ts" />
+import mongodb = require('mongodb');
+import ObjectID = mongodb.ObjectID;
 import extend = require('extend');
 import mongo = require('./mongo');
 import config = require('../config');
@@ -11,6 +14,12 @@ var collName = 'post';
 
 var db: mongodb.Db;
 var post: mongodb.Collection;
+
+export function findById(_id: string, callback: (err, result: Post) => void) {
+    post.findOne({ _id: new ObjectID(_id) }, (err, result) => {
+        callback(err, result);
+    });
+}
 
 /**
  * 모집글 10개를 불러옴.
@@ -72,10 +81,9 @@ export function fetchWhen(date: Date, callback: (results: any[]) => void, sortBy
         });
 }
 
-export function insert(newPost: Post, callback: (result) => void) {
+export function insert(newPost: Post, callback: (err, result) => void) {
     post.insert(newPost, { w: 1 }, (err, result) => {
-        if (err) return console.dir(err);
-        callback(result);
+        callback(err, result);
     });
 }
 

@@ -1,4 +1,5 @@
-﻿import express = require('express');
+﻿/// <reference path="../../Scripts/typings/express-4.x/express.d.ts" />
+import express = require('express');
 
 var router = express.Router();
 router

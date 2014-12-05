@@ -1,4 +1,5 @@
-﻿import express = require('express');
+﻿/// <reference path="../../../Scripts/typings/express-4.x/express.d.ts" />
+import express = require('express');
 import db = require('../../mongo/post');
 import schema = require('../../mongo/schema');
 import Post = schema.Post;
@@ -6,7 +7,9 @@ import Post = schema.Post;
 var router = express.Router();
 router
     .get('/', (req, res, next) => {
-
+        db.fetch((results) => {
+            res.json(results);
+        });
     })
     .post('/', (req, res, next) => {
         var b = req.body;
@@ -28,11 +31,23 @@ router
         };
 
         var newPost = new Post(data);
-
+        console.log(newPost);
         // Insert into mongodb
-        db.insert(newPost, (result) => {
-            res.json(result);
+        db.insert(newPost, (err, result) => {
+            console.log(result);
+            if (err)
+                res.json({ msg: 'error' });
+            else
+                res.json(result);
         });
-    });
+    })
+    .param('id', (req, res, next, _id) => {
+        db.findById(_id, (err, post) => {
+            req['post'] = post;
+            console.log(post);
+            next();
+        });
+    })
+    .use('/:id', require('./id/index'));
 
 export = router;

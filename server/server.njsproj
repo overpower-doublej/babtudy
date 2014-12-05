@@ -45,6 +45,7 @@
   <ItemGroup>
     <Folder Include="mongo_shell\" />
     <Folder Include="Scripts\typings\should\" />
+    <Folder Include="src\route\post\id\" />
     <Folder Include="src\route\user\id\" />
     <Folder Include="test\" />
     <Folder Include="Scripts\" />
@@ -58,7 +59,6 @@
     <Folder Include="src\gcm\" />
     <Folder Include="src\mongo\" />
     <Folder Include="src\route\" />
-    <Folder Include="src\route\chat\" />
     <Folder Include="src\route\user\" />
     <Folder Include="src\route\post\" />
     <Folder Include="src\route\reg\" />
@@ -85,6 +85,7 @@
     <TypeScriptCompile Include="src\mongo\schema.ts" />
     <TypeScriptCompile Include="src\mongo\user.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />
+    <TypeScriptCompile Include="src\route\post\id\index.ts" />
     <TypeScriptCompile Include="src\route\post\index.ts" />
     <TypeScriptCompile Include="src\route\reg\index.ts" />
     <TypeScriptCompile Include="src\route\user\id\index.ts" />
