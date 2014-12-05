@@ -1,4 +1,4 @@
-﻿/// <reference path="../../scripts/typings/mongodb/mongodb.d.ts" />
+﻿/// <reference path="../../Scripts/typings/mongodb/mongodb.d.ts" />
 
 import mongodb = require('mongodb');
 import config = require('../config');
