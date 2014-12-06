@@ -2,7 +2,7 @@
 import express = require('express');
 import extend = require('extend');
 import dbUser = require('../../../../../mongo/user');
-import dbPost = require('../../../../../mongo/post');
+import dbPost = require('../../../../../mongo/post/index');
 import schema = require('../../../../../mongo/schema');
 import Post = schema.Post;
 import User = schema.User;
@@ -28,9 +28,9 @@ router
         var vote = req.body['vote'];
 
         // Update vote data
-        dbPost.updateVote(post._id, access._id, userId, vote, (result) => {
+        dbPost.access.updateVote(post._id, access._id, userId, vote, (result) => {
             // Did everyone vote?
-            dbPost.findAccess(post._id, access._id, (access) => {
+            dbPost.access.find(post._id, access._id, (access) => {
                 for (var userId in access.votes) {
                     var vote = access.votes[userId];
                     // If someone didn't vote yet, return
@@ -53,7 +53,7 @@ router
                 });
 
                 // Set vote result
-                dbPost.setVoteResult(post._id, access._id);
+                dbPost.access.setVoteResult(post._id, access._id);
             });
         });
     });

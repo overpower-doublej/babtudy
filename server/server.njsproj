@@ -50,6 +50,7 @@
     <Folder Include="Scripts\typings\should\" />
     <Folder Include="Scripts\typings\superagent\" />
     <Folder Include="Scripts\typings\supertest\" />
+    <Folder Include="src\mongo\post\" />
     <Folder Include="src\route\post\id\" />
     <Folder Include="src\route\post\id\acs\" />
     <Folder Include="src\route\post\id\acs\accessId\" />
@@ -93,7 +94,10 @@
     <TypeScriptCompile Include="src\gcm\pushCode.ts" />
     <TypeScriptCompile Include="src\mongo\gcm.ts" />
     <TypeScriptCompile Include="src\mongo\mongo.ts" />
-    <TypeScriptCompile Include="src\mongo\post.ts" />
+    <TypeScriptCompile Include="src\mongo\post.org.ts" />
+    <TypeScriptCompile Include="src\mongo\post\access.ts" />
+    <TypeScriptCompile Include="src\mongo\post\chat.ts" />
+    <TypeScriptCompile Include="src\mongo\post\index.ts" />
     <TypeScriptCompile Include="src\mongo\schema.ts" />
     <TypeScriptCompile Include="src\mongo\user.ts" />
     <TypeScriptCompile Include="src\route\index.ts" />

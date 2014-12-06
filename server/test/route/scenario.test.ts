@@ -4,7 +4,7 @@ import request = require('supertest');
 import should = require('should');
 import app = require('../../src/app');
 import mongo = require('../../src/mongo/mongo');
-import dbPost = require('../../src/mongo/post');
+import dbPost = require('../../src/mongo/post/index');
 import colors = require('colors');
 
 before((done) => {

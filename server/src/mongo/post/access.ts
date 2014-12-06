@@ -1,0 +1,118 @@
+﻿/// <reference path="../../../Scripts/typings/mongodb/mongodb.d.ts" />
+import mongodb = require('mongodb');
+import ObjectID = mongodb.ObjectID;
+import mongo = require('../mongo');
+import config = require('../../config');
+import schema = require('../schema');
+import User = schema.User;
+import Post = schema.Post;
+import Access = schema.Access;
+
+
+var post: mongodb.Collection;
+
+export function push(postId: ObjectID, access: Access, callback: (result) => void) {
+    post.update({ _id: postId }, { $push: { accesses: access } }, (err, result) => {
+        if (err) return console.error(err);
+        callback(result);
+    });
+}
+
+export function find(postId: ObjectID, accessId: string, callback: (access: Access) => void);
+export function find(postId: ObjectID, accessId: ObjectID, callback: (access: Access) => void)
+export function find(postId: ObjectID, accessId: any, callback: (access: Access) => void) {
+    // Check argument
+    if (typeof accessId == 'string')
+        accessId = new ObjectID(accessId);
+    // Set aggregation pipeline stages
+    var stages = [
+        {
+            $match: { _id: postId }
+        },
+        {
+            $project: { _id: 0, accesses: 1 }
+        },
+        {
+            $unwind: '$accesses'
+        },
+        {
+            $match: { 'accesses._id': accessId }
+        }
+    ];
+    // Aggregate
+    post.aggregate(stages, (err, results: any[]) => {
+        if (err) return console.error(err);
+
+        var result = results[0].accesses;
+        callback(result);
+    });
+}
+
+export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string, vote: boolean, callback: (result) => void) {
+    // Set query
+    var selector = {
+        _id: postId,
+        'accesses._id': accessId
+    };
+    // Set replacement document
+    var userVoteKey = 'accesses.$.votes.' + userId;
+    var doc = { $set: {} };
+    doc.$set[userVoteKey] = vote;
+    // Update
+    post.update(selector, doc, { w: 1 }, (err, result) => {
+        if (err) return console.error(err);
+        callback(result);
+    });
+}
+
+export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (result) => void) {
+    // Check arguments
+    if (typeof callback != 'function')
+        callback = () => { };
+
+    // Set query
+    var selector = {
+        _id: postId,
+        'accesses._id': accessId
+    };
+
+    var voteResult = true;
+
+    find(postId, accessId, (access) => {
+        var votes = access.votes;
+
+        for (var userId in access.votes) {
+            if (votes[userId] == false) {
+                voteResult = false;
+                break;
+            }
+        }
+        // Set replacement document
+        var doc = { $set: { 'accesses.$.result': voteResult } };
+
+        // Update
+        post.update(selector, doc, { w: 1 }, (err, result) => {
+            if (err) return console.error(err);
+            // If vote result is true, push user into BoBroom member, and call callback function.
+            if (voteResult == true) {
+                post.update({ _id: postId }, { $push: { users: access.userId } }, { w: 1 }, (err, result1) => {
+                    if (err) return console.error(err);
+                    callback(result1);
+                });
+            }
+            // Else if vote result is false, just call callback function immediately.
+            else if (voteResult == false)
+                callback(result);
+        });
+
+
+    });
+}
+
+// Because of circular module dependency, import after export other functions
+import index = require('./index');
+// Get Post collection
+index.getPostCollection((_post) => {
+    post = _post;
+});
+

@@ -1,7 +1,7 @@
 ﻿import express = require('express');
 import extend = require('extend');
 import dbUser = require('../../../../mongo/user');
-import dbPost = require('../../../../mongo/post');
+import dbPost = require('../../../../mongo/post/index');
 import schema = require('../../../../mongo/schema');
 import Post = schema.Post;
 import User = schema.User;
@@ -43,7 +43,7 @@ router
                     // Create new Access object
                     var newAccess = new Access(userId, post);
                     // Insert into db
-                    dbPost.pushAccess(post._id, newAccess, (result) => {
+                    dbPost.access.push(post._id, newAccess, (result) => {
                         res.json({
                             success: 1,
                             failure: 0,
@@ -63,7 +63,7 @@ router
     })
     .param('acsId', (req, res, next, acsId: string) => {
         var post: Post = req['post'];
-        dbPost.findAccess(post._id, acsId, (access) => {
+        dbPost.access.find(post._id, acsId, (access) => {
             req['acs'] = access;
             next();
         });

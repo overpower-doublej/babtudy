@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../../Scripts/typings/express-4.x/express.d.ts" />
 import express = require('express');
-import db = require('../../mongo/post');
+import db = require('../../mongo/post/index');
 import schema = require('../../mongo/schema');
 import Post = schema.Post;
 

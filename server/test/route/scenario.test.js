@@ -4,7 +4,7 @@ var request = require('supertest');
 var should = require('should');
 var app = require('../../src/app');
 var mongo = require('../../src/mongo/mongo');
-var dbPost = require('../../src/mongo/post');
+var dbPost = require('../../src/mongo/post/index');
 
 before(function (done) {
     setTimeout(function () {
