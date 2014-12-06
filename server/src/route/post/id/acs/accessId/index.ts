@@ -17,7 +17,7 @@ router
         var post: Post = req['post'];
         var access: Access = req['acs'];
 
-        res.json(access);
+        res.json({ success: 1, failure: 0, data: access });
     })
     .post('/', (req, res, next) => {
         // Update vote
@@ -51,7 +51,9 @@ router
                             res.json({ success: 0, failure: 1, msg: 'GCM send failure' });
                     });
                 });
-                dbPost.setVoteResult
+
+                // Set vote result
+                dbPost.setVoteResult(post._id, access._id);
             });
         });
     });

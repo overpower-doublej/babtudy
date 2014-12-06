@@ -146,18 +146,37 @@ export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string,
     });
 }
 
-export function setVoteResult(postId: ObjectID, accessId: ObjectID, result: boolean, callback: (result) => void) {
+export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (result) => void) {
+    // Check arguments
+    if (typeof callback != 'function')
+        callback = () => { };
+
     // Set query
     var selector = {
         _id: postId,
         'accesses._id': accessId
     };
-    // Set replacement document
-    var doc = { $set: { 'accesses.$.result': result } };
-    // Update
-    post.update(selector, doc, { w: 1 }, (err, result) => {
-        if (err) return console.error(err);
-        callback(result);
+
+    var result = true;
+
+    findAccess(postId, accessId, (access) => {
+        var votes = access.votes;
+
+        for (var userId in access.votes) {
+            if (votes[userId] == false) {
+                result = false;
+                break;
+            }
+        }
+
+        // Set replacement document
+        var doc = { $set: { 'accesses.$.result': result } };
+
+        // Update
+        post.update(selector, doc, { w: 1 }, (err, result) => {
+            if (err) return console.error(err);
+            callback(result);
+        });
     });
 }
 

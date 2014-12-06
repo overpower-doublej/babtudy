@@ -185,4 +185,30 @@ describe('User3 denies User1', () => {
                 });
         });
     });
+
+    it('must have result', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            request(app)
+                .get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.success.should.equal(1);   // because of invalid registration id
+                    res.body.data.result.should.equal(false);
+                    done();
+                });
+        });
+    });
+});
+
+describe('User2 wants to join User3\'s BoBroom', () => {
+    it('POST /post/:postId/acs', (done) => {
+        request(app)
+            .post('/post/' + newBobroom._id + '/acs')
+            .send({ userId: user2._id })
+            .end((err, res) => {
+                should.not.exist(err);
+                res.body.success.should.equal(1);   // because of invalid registration id
+                done();
+            });
+    });
 });
