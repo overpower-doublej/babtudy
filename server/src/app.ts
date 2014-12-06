@@ -22,6 +22,9 @@ var winstonMongo = require('winston-mongodb').MongoDB;
 import config = require('./config');
 import mongo = require('./mongo/mongo');
 
+var MODE = process.env.MODE;
+console.log('SERVER RUNNING MODE: %s'.cyan, MODE);
+
 var app = express();
 
 app.enable('trust proxy');      // To get real ip
@@ -31,7 +34,8 @@ app.use(cookieParser());
 
 // Setup loggers
 // For console, use morgan logger
-app.use(logger('combined'));
+if (MODE != 'test')
+    app.use(logger('combined'));
 // express-winston logger makes sense BEFORE the router.
 // Send log to mongodb
 expressWinston.requestWhitelist.push('ip');

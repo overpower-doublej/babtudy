@@ -104,7 +104,7 @@
     <TypeScriptCompile Include="src\route\user\id\index.ts" />
     <TypeScriptCompile Include="src\route\user\index.ts" />
     <TypeScriptCompile Include="test\mongo\user.spec.ts" />
-    <TypeScriptCompile Include="test\route\index.spec.ts" />
+    <TypeScriptCompile Include="test\route\scenario.test.ts" />
     <TypeScriptCompile Include="test\route\post\index.spec.ts" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />

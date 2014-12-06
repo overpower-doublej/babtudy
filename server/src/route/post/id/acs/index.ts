@@ -41,12 +41,15 @@ router
                     });
                 else if (result.success) {
                     // Create new Access object
-                    var newAcs = new Access(userId, post);
+                    var newAccess = new Access(userId, post);
                     // Insert into db
-                    dbPost.pushAccess(post._id, newAcs, (result) => {
+                    dbPost.pushAccess(post._id, newAccess, (result) => {
                         res.json({
                             success: 1,
-                            failure: 0
+                            failure: 0,
+                            data: {
+                                accessId: newAccess._id
+                            }
                         });
                     });
                 }

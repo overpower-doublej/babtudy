@@ -157,26 +157,36 @@ export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (
         'accesses._id': accessId
     };
 
-    var result = true;
+    var voteResult = true;
 
     findAccess(postId, accessId, (access) => {
         var votes = access.votes;
 
         for (var userId in access.votes) {
             if (votes[userId] == false) {
-                result = false;
+                voteResult = false;
                 break;
             }
         }
-
         // Set replacement document
-        var doc = { $set: { 'accesses.$.result': result } };
+        var doc = { $set: { 'accesses.$.result': voteResult } };
 
         // Update
         post.update(selector, doc, { w: 1 }, (err, result) => {
             if (err) return console.error(err);
-            callback(result);
+            // If vote result is true, push user into BoBroom member, and call callback function.
+            if (voteResult == true) {
+                post.update({ _id: postId }, { $push: { users: access.userId } }, { w: 1 }, (err, result1) => {
+                    if (err) return console.error(err);
+                    callback(result1);
+                });
+            }
+            // Else if vote result is false, just call callback function immediately.
+            else if (voteResult == false)
+                callback(result);
         });
+
+
     });
 }
 

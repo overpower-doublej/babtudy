@@ -51,7 +51,6 @@ export class Access {
     result: boolean;        // 최종 투표결과. 찬성이면 true, 반대면 false 이다. 아직 투표가 끝나지 않았다면 undefined
 
     constructor(userId: string, post: Post) {
-        console.log(post);
         this._id = new ObjectID();
         this.userId = userId;
         this.votes = {};

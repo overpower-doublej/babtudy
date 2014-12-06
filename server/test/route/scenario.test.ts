@@ -1,4 +1,6 @@
-﻿import request = require('supertest');
+﻿process.env.MODE = 'test';
+
+import request = require('supertest');
 import should = require('should');
 import app = require('../../src/app');
 import mongo = require('../../src/mongo/mongo');
@@ -134,8 +136,8 @@ describe('User3 create BoBroom', () => {
             .end((err, res) => {
                 should.not.exist(err);
                 res.body.success.should.equal(1);
-                console.log('# New Post Info'.bold.cyan);
-                console.log(res.body);
+                //console.log('# New Post Info'.bold.cyan);
+                //console.log(res.body);
                 done();
             });
     });
@@ -151,15 +153,15 @@ describe('Users search for bobrooms', () => {
             .end((err, res) => {
                 should.not.exist(err);
                 res.body.success.should.equal(1);
-                console.log('# BoBroom List'.bold.cyan);
-                console.log(res.body);
+                //console.log('# BoBroom List'.bold.cyan);
+                //console.log(res.body);
                 newBobroom = res.body.data[0];
                 done();
             });
     });
 });
 
-describe('User1 wants to join User\'s BoBroom', () => {
+describe('User1 wants to join User3\'s BoBroom', () => {
     it('POST /post/:postId/acs', (done) => {
         request(app)
             .post('/post/' + newBobroom._id + '/acs')
@@ -186,7 +188,7 @@ describe('User3 denies User1', () => {
         });
     });
 
-    it('must have result', (done) => {
+    it('must have result "false"', (done) => {
         dbPost.findById(newBobroom._id, (err, result) => {
             request(app)
                 .get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id)
@@ -198,8 +200,16 @@ describe('User3 denies User1', () => {
                 });
         });
     });
+
+    it('must not push user1 into member of bobroom', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            result.users.should.not.containEql(user1._id);
+            done();
+        });
+    });
 });
 
+var user2AccessId;
 describe('User2 wants to join User3\'s BoBroom', () => {
     it('POST /post/:postId/acs', (done) => {
         request(app)
@@ -208,7 +218,108 @@ describe('User2 wants to join User3\'s BoBroom', () => {
             .end((err, res) => {
                 should.not.exist(err);
                 res.body.success.should.equal(1);   // because of invalid registration id
+                res.body.data.should.have.property('accessId');
+                user2AccessId = res.body.data.accessId;
                 done();
             });
+    });
+});
+
+describe('User3 accepts User2', () => {
+    it('POST /post/:postId/acs/:acsId', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            request(app)
+                .post('/post/' + newBobroom._id + '/acs/' + user2AccessId)
+                .send({ userId: user3._id, vote: true })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.success.should.equal(0);   // because of invalid registration id
+                    done();
+                });
+        });
+    });
+
+    it('must have result "true"', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            request(app)
+                .get('/post/' + newBobroom._id + '/acs/' + user2AccessId)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.success.should.equal(1);   // because of invalid registration id
+                    res.body.data.result.should.equal(true);
+                    done();
+                });
+        });
+    });
+
+    it('must push user2 into member of bobroom', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            result.users.should.containEql(user2._id);
+            done();
+        });
+    });
+});
+
+var user4AccessId;
+describe('user4 wants to join bobroom which is comprised of user3, and user2', () => {
+    it('POST /post/:postId/acs', (done) => {
+        request(app)
+            .post('/post/' + newBobroom._id + '/acs')
+            .send({ userId: user4._id })
+            .end((err, res) => {
+                should.not.exist(err);
+                res.body.success.should.equal(1);   // because of invalid registration id
+                res.body.data.should.have.property('accessId');
+                user4AccessId = res.body.data.accessId;
+                done();
+            });
+    });
+});
+
+describe('user3 and user2 accepts User4', () => {
+    it('POST /post/:postId/acs/:acsId', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            request(app)
+                .post('/post/' + newBobroom._id + '/acs/' + user4AccessId)
+                .send({ userId: user3._id, vote: true })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.success.should.equal(1);   // because vote does not finish yet
+                    done();
+                });
+        });
+    });
+
+    it('POST /post/:postId/acs/:acsId', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            request(app)
+                .post('/post/' + newBobroom._id + '/acs/' + user4AccessId)
+                .send({ userId: user2._id, vote: true })
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.success.should.equal(0);   // because of invalid registration id
+                    done();
+                });
+        });
+    });
+
+    it('must have result "true"', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            request(app)
+                .get('/post/' + newBobroom._id + '/acs/' + user4AccessId)
+                .end((err, res) => {
+                    should.not.exist(err);
+                    res.body.success.should.equal(1);   // because of invalid registration id
+                    res.body.data.result.should.equal(true);
+                    done();
+                });
+        });
+    });
+
+    it('must push user4 into member of bobroom', (done) => {
+        dbPost.findById(newBobroom._id, (err, result) => {
+            result.users.should.containEql(user4._id);
+            done();
+        });
     });
 });

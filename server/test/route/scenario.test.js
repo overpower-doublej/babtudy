@@ -1,4 +1,6 @@
-﻿var request = require('supertest');
+﻿process.env.MODE = 'test';
+
+var request = require('supertest');
 var should = require('should');
 var app = require('../../src/app');
 var mongo = require('../../src/mongo/mongo');
@@ -108,8 +110,9 @@ describe('User3 create BoBroom', function () {
         request(app).post('/post').send(reqBody).expect(200).end(function (err, res) {
             should.not.exist(err);
             res.body.success.should.equal(1);
-            console.log('# New Post Info'.bold.cyan);
-            console.log(res.body);
+
+            //console.log('# New Post Info'.bold.cyan);
+            //console.log(res.body);
             done();
         });
     });
@@ -122,15 +125,16 @@ describe('Users search for bobrooms', function () {
         request(app).get('/post').expect(200).end(function (err, res) {
             should.not.exist(err);
             res.body.success.should.equal(1);
-            console.log('# BoBroom List'.bold.cyan);
-            console.log(res.body);
+
+            //console.log('# BoBroom List'.bold.cyan);
+            //console.log(res.body);
             newBobroom = res.body.data[0];
             done();
         });
     });
 });
 
-describe('User1 wants to join User\'s BoBroom', function () {
+describe('User1 wants to join User3\'s BoBroom', function () {
     it('POST /post/:postId/acs', function (done) {
         request(app).post('/post/' + newBobroom._id + '/acs').send({ userId: user1._id }).end(function (err, res) {
             should.not.exist(err);
@@ -151,7 +155,7 @@ describe('User3 denies User1', function () {
         });
     });
 
-    it('must have result', function (done) {
+    it('must have result "false"', function (done) {
         dbPost.findById(newBobroom._id, function (err, result) {
             request(app).get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).end(function (err, res) {
                 should.not.exist(err);
@@ -161,22 +165,32 @@ describe('User3 denies User1', function () {
             });
         });
     });
-});
 
-describe('User2 wants to join User3\'s BoBroom', function () {
-    it('POST /post/:postId/acs', function (done) {
-        request(app).post('/post/' + newBobroom._id + '/acs').send({ userId: user2._id }).end(function (err, res) {
-            should.not.exist(err);
-            res.body.success.should.equal(1); // because of invalid registration id
+    it('must not push user1 into member of bobroom', function (done) {
+        dbPost.findById(newBobroom._id, function (err, result) {
+            result.users.should.not.containEql(user1._id);
             done();
         });
     });
 });
 
-describe('User3 accepts User1', function () {
+var user2AccessId;
+describe('User2 wants to join User3\'s BoBroom', function () {
+    it('POST /post/:postId/acs', function (done) {
+        request(app).post('/post/' + newBobroom._id + '/acs').send({ userId: user2._id }).end(function (err, res) {
+            should.not.exist(err);
+            res.body.success.should.equal(1); // because of invalid registration id
+            res.body.data.should.have.property('accessId');
+            user2AccessId = res.body.data.accessId;
+            done();
+        });
+    });
+});
+
+describe('User3 accepts User2', function () {
     it('POST /post/:postId/acs/:acsId', function (done) {
         dbPost.findById(newBobroom._id, function (err, result) {
-            request(app).post('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).send({ userId: user3._id, vote: true }).end(function (err, res) {
+            request(app).post('/post/' + newBobroom._id + '/acs/' + user2AccessId).send({ userId: user3._id, vote: true }).end(function (err, res) {
                 should.not.exist(err);
                 res.body.success.should.equal(0); // because of invalid registration id
                 done();
@@ -184,9 +198,9 @@ describe('User3 accepts User1', function () {
         });
     });
 
-    it('must have result', function (done) {
+    it('must have result "true"', function (done) {
         dbPost.findById(newBobroom._id, function (err, result) {
-            request(app).get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).end(function (err, res) {
+            request(app).get('/post/' + newBobroom._id + '/acs/' + user2AccessId).end(function (err, res) {
                 should.not.exist(err);
                 res.body.success.should.equal(1); // because of invalid registration id
                 res.body.data.result.should.equal(true);
@@ -195,11 +209,64 @@ describe('User3 accepts User1', function () {
         });
     });
 
-    if ('must push user1 into member of bobroom', function (done) {
+    it('must push user2 into member of bobroom', function (done) {
         dbPost.findById(newBobroom._id, function (err, result) {
-            result.users.should.containEql(user1._id).and.should.be.instanceOf(Array).and.have.lengthOf(2);
+            result.users.should.containEql(user2._id);
+            done();
         });
-    })
-        ;
+    });
 });
-//# sourceMappingURL=index.spec.js.map
+
+var user4AccessId;
+describe('user4 wants to join bobroom which is comprised of user3, and user2', function () {
+    it('POST /post/:postId/acs', function (done) {
+        request(app).post('/post/' + newBobroom._id + '/acs').send({ userId: user4._id }).end(function (err, res) {
+            should.not.exist(err);
+            res.body.success.should.equal(1); // because of invalid registration id
+            res.body.data.should.have.property('accessId');
+            user4AccessId = res.body.data.accessId;
+            done();
+        });
+    });
+});
+
+describe('user3 and user2 accepts User4', function () {
+    it('POST /post/:postId/acs/:acsId', function (done) {
+        dbPost.findById(newBobroom._id, function (err, result) {
+            request(app).post('/post/' + newBobroom._id + '/acs/' + user4AccessId).send({ userId: user3._id, vote: true }).end(function (err, res) {
+                should.not.exist(err);
+                res.body.success.should.equal(1); // because vote does not finish yet
+                done();
+            });
+        });
+    });
+
+    it('POST /post/:postId/acs/:acsId', function (done) {
+        dbPost.findById(newBobroom._id, function (err, result) {
+            request(app).post('/post/' + newBobroom._id + '/acs/' + user4AccessId).send({ userId: user2._id, vote: true }).end(function (err, res) {
+                should.not.exist(err);
+                res.body.success.should.equal(0); // because of invalid registration id
+                done();
+            });
+        });
+    });
+
+    it('must have result "true"', function (done) {
+        dbPost.findById(newBobroom._id, function (err, result) {
+            request(app).get('/post/' + newBobroom._id + '/acs/' + user4AccessId).end(function (err, res) {
+                should.not.exist(err);
+                res.body.success.should.equal(1); // because of invalid registration id
+                res.body.data.result.should.equal(true);
+                done();
+            });
+        });
+    });
+
+    it('must push user4 into member of bobroom', function (done) {
+        dbPost.findById(newBobroom._id, function (err, result) {
+            result.users.should.containEql(user4._id);
+            done();
+        });
+    });
+});
+//# sourceMappingURL=scenario.test.js.map
