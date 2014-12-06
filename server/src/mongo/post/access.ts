@@ -18,10 +18,14 @@ export function push(postId: ObjectID, access: Access, callback: (result) => voi
     });
 }
 
-export function find(postId: ObjectID, accessId: string, callback: (access: Access) => void);
-export function find(postId: ObjectID, accessId: ObjectID, callback: (access: Access) => void)
-export function find(postId: ObjectID, accessId: any, callback: (access: Access) => void) {
+export function findById(postId: string, accessId: string, callback: (access: Access) => void);
+export function findById(postId: string, accessId: ObjectID, callback: (access: Access) => void);
+export function findById(postId: ObjectID, accessId: string, callback: (access: Access) => void);
+export function findById(postId: ObjectID, accessId: ObjectID, callback: (access: Access) => void);
+export function findById(postId: any, accessId: any, callback: (access: Access) => void) {
     // Check argument
+    if (typeof postId == 'string')
+        postId = new ObjectID(postId);
     if (typeof accessId == 'string')
         accessId = new ObjectID(accessId);
     // Set aggregation pipeline stages
@@ -37,16 +41,24 @@ export function find(postId: ObjectID, accessId: any, callback: (access: Access)
         },
         {
             $match: { 'accesses._id': accessId }
+        },
+        {
+            $project: {
+                _id: '$accesses._id',
+                userId: '$accesses.userId',
+                votes: '$accesses.votes',
+                date: '$accesses.date',
+                result: '$accesses.result'
+            }
         }
     ];
     // Aggregate
-    post.aggregate(stages, (err, results: any[]) => {
+    post.aggregate(stages, (err, results: Access[]) => {
         if (err) return console.error(err);
-
-        var result = results[0].accesses;
-        callback(result);
+        callback(results[0]);
     });
 }
+
 
 export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string, vote: boolean, callback: (result) => void) {
     // Set query
@@ -78,7 +90,7 @@ export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (
 
     var voteResult = true;
 
-    find(postId, accessId, (access) => {
+    findById(postId, accessId, (access) => {
         var votes = access.votes;
 
         for (var userId in access.votes) {

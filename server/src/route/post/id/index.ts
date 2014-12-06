@@ -11,6 +11,7 @@ import CODE = require('../../../gcm/pushCode');
 
 var router = express.Router();
 router
-    .use('/acs', require('./acs/index'));
+    .use('/acs', require('./acs/index'))
+    .use('/chat', require('./chat/index'));
 
 export = router;

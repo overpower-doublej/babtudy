@@ -30,7 +30,7 @@ router
         // Update vote data
         dbPost.access.updateVote(post._id, access._id, userId, vote, (result) => {
             // Did everyone vote?
-            dbPost.access.find(post._id, access._id, (access) => {
+            dbPost.access.findById(post._id, access._id, (access) => {
                 for (var userId in access.votes) {
                     var vote = access.votes[userId];
                     // If someone didn't vote yet, return

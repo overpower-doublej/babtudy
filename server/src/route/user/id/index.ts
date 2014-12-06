@@ -6,13 +6,15 @@ import User = schema.User;
 
 var router = express.Router();
 router
+
     .get('/', (req, res, next) => {
         var user = {
             _id: req.user._id,
             name: req.user.name
         };
-        res.json(user);
+        res.json({ success: 1, failure: 0, data: user });
     })
+
     .post('/', (req, res, next) => {
         var oldUser = req.user;
 
@@ -34,12 +36,13 @@ router
         };
 
         db.update(new User(updatedUser), (result) => {
-            res.json(result);
+            res.json({ success: 1, failure: 0 });
         });
     })
+
     .post('/login', (req, res, next) => {
         var user: User = req.user;
-        console.log(req.body);
+
         var pwd = req.body['pwd'];
 
         db.findById(user._id, (user) => {

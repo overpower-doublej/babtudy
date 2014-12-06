@@ -63,7 +63,7 @@ router
     })
     .param('acsId', (req, res, next, acsId: string) => {
         var post: Post = req['post'];
-        dbPost.access.find(post._id, acsId, (access) => {
+        dbPost.access.findById(post._id, acsId, (access) => {
             req['acs'] = access;
             next();
         });

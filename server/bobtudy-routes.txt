@@ -58,6 +58,8 @@ POST	/post/:postId/acs/:acsId	{}	수락/거절
 GET		/post/:postId/chat			[]	해당 id 채팅방의 최근대화 30개 가져오기
 		return	대화 30개
 
+GET		/post/:postId/chat/after/:ISOstring		해당 시간 이후의 메세지 30개
+
 POST	/post/:postId/chat			{}	해당 id 채팅방에 메세지 전송
 		return	status
 		req	밥터디 그룹의 멤버들에게 메세지 전송

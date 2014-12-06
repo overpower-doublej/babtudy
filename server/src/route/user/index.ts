@@ -6,6 +6,7 @@ import User = schema.User;
 
 var router = express.Router();
 router
+
     .post('/', (req, res, next) => {
         var _id = req.body['_id'];
         var pwd = req.body['pwd'];
@@ -28,7 +29,7 @@ router
         var newUser = new User(data);
 
         db.insert(newUser, (result) => {
-            res.json(result);
+            res.json({ success: 1, failure: 0 });
         });
     })
 // Parse parameter 'id', insert user data into req.user

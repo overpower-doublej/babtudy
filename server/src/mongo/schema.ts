@@ -15,7 +15,7 @@ export class Post {
 
     users: string[];        // 참가한 사용자들의 id
     accesses: Access[];     // 참가 신청 목록
-    chat: Message[];        // 채팅
+    chats: Chat[];        // 채팅
     attend: Object;         // 출석 {userId: boolean}
 
     /**
@@ -31,7 +31,7 @@ export class Post {
             this.postedDate = new Date();
             this.users = [];
             this.accesses = [];
-            this.chat = [];
+            this.chats = [];
             this.attend = {};
 
             this.users.push(this.boss);
@@ -82,8 +82,15 @@ export class User {
     }
 }
 
-export class Message {
+export class Chat {
     date: Date;              // Android에서 전송을 누른 시각
     msg: string;            // 메세지 내용
     userId: string;       // 사용자 id
+
+    constructor(userId: string, msg: string) {
+        this.userId = userId;
+        this.msg = msg;
+
+        this.date = new Date();
+    }
 }
