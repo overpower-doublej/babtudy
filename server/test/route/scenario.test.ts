@@ -174,7 +174,7 @@ describe('User1 wants to join User3\'s BoBroom', () => {
             .expect(200)
             .end((err, res) => {
                 should.not.exist(err);
-                res.body.success.should.equal(1);   // because of invalid registration id
+                res.body.success.should.equal(1);
                 done();
             });
     });
@@ -189,7 +189,7 @@ describe('User3 denies User1', () => {
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.success.should.equal(0);   // because of invalid registration id
+                    res.body.success.should.equal(1);
                     done();
                 });
         });
@@ -202,7 +202,7 @@ describe('User3 denies User1', () => {
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.success.should.equal(1);   // because of invalid registration id
+                    res.body.success.should.equal(1);
                     res.body.data.result.should.equal(false);
                     done();
                 });
@@ -226,7 +226,7 @@ describe('User2 wants to join User3\'s BoBroom', () => {
             .expect(200)
             .end((err, res) => {
                 should.not.exist(err);
-                res.body.success.should.equal(1);   // because of invalid registration id
+                res.body.success.should.equal(1);
                 res.body.data.should.have.property('accessId');
                 user2AccessId = res.body.data.accessId;
                 done();
@@ -243,7 +243,7 @@ describe('User3 accepts User2', () => {
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.success.should.equal(0);   // because of invalid registration id
+                    res.body.success.should.equal(1);
                     done();
                 });
         });
@@ -256,7 +256,7 @@ describe('User3 accepts User2', () => {
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.success.should.equal(1);   // because of invalid registration id
+                    res.body.success.should.equal(1);
                     res.body.data.result.should.equal(true);
                     done();
                 });
@@ -280,7 +280,7 @@ describe('user4 wants to join bobroom which is comprised of user3, and user2', (
             .expect(200)
             .end((err, res) => {
                 should.not.exist(err);
-                res.body.success.should.equal(1);   // because of invalid registration id
+                res.body.success.should.equal(1);
                 res.body.data.should.have.property('accessId');
                 user4AccessId = res.body.data.accessId;
                 done();
@@ -297,7 +297,7 @@ describe('user3 and user2 accepts User4', () => {
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.success.should.equal(1);   // because vote does not finish yet
+                    res.body.success.should.equal(1);
                     done();
                 });
         });
@@ -311,7 +311,7 @@ describe('user3 and user2 accepts User4', () => {
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
-                    res.body.success.should.equal(0);   // because of invalid registration id
+                    res.body.success.should.equal(1);
                     done();
                 });
         });

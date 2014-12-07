@@ -142,7 +142,7 @@ describe('User1 wants to join User3\'s BoBroom', function () {
     it('POST /post/:postId/acs', function (done) {
         request.post('/post/' + newBobroom._id + '/acs').send({ userId: user1._id }).expect(200).end(function (err, res) {
             should.not.exist(err);
-            res.body.success.should.equal(1); // because of invalid registration id
+            res.body.success.should.equal(1);
             done();
         });
     });
@@ -153,7 +153,7 @@ describe('User3 denies User1', function () {
         dbPost.findById(newBobroom._id, function (err, result) {
             request.post('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).send({ userId: user3._id, vote: false }).expect(200).end(function (err, res) {
                 should.not.exist(err);
-                res.body.success.should.equal(0); // because of invalid registration id
+                res.body.success.should.equal(1);
                 done();
             });
         });
@@ -163,7 +163,7 @@ describe('User3 denies User1', function () {
         dbPost.findById(newBobroom._id, function (err, result) {
             request.get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).expect(200).end(function (err, res) {
                 should.not.exist(err);
-                res.body.success.should.equal(1); // because of invalid registration id
+                res.body.success.should.equal(1);
                 res.body.data.result.should.equal(false);
                 done();
             });
@@ -183,7 +183,7 @@ describe('User2 wants to join User3\'s BoBroom', function () {
     it('POST /post/:postId/acs', function (done) {
         request.post('/post/' + newBobroom._id + '/acs').send({ userId: user2._id }).expect(200).end(function (err, res) {
             should.not.exist(err);
-            res.body.success.should.equal(1); // because of invalid registration id
+            res.body.success.should.equal(1);
             res.body.data.should.have.property('accessId');
             user2AccessId = res.body.data.accessId;
             done();
@@ -196,7 +196,7 @@ describe('User3 accepts User2', function () {
         dbPost.findById(newBobroom._id, function (err, result) {
             request.post('/post/' + newBobroom._id + '/acs/' + user2AccessId).send({ userId: user3._id, vote: true }).expect(200).end(function (err, res) {
                 should.not.exist(err);
-                res.body.success.should.equal(0); // because of invalid registration id
+                res.body.success.should.equal(1);
                 done();
             });
         });
@@ -206,7 +206,7 @@ describe('User3 accepts User2', function () {
         dbPost.findById(newBobroom._id, function (err, result) {
             request.get('/post/' + newBobroom._id + '/acs/' + user2AccessId).expect(200).end(function (err, res) {
                 should.not.exist(err);
-                res.body.success.should.equal(1); // because of invalid registration id
+                res.body.success.should.equal(1);
                 res.body.data.result.should.equal(true);
                 done();
             });
@@ -226,7 +226,7 @@ describe('user4 wants to join bobroom which is comprised of user3, and user2', f
     it('POST /post/:postId/acs', function (done) {
         request.post('/post/' + newBobroom._id + '/acs').send({ userId: user4._id }).expect(200).end(function (err, res) {
             should.not.exist(err);
-            res.body.success.should.equal(1); // because of invalid registration id
+            res.body.success.should.equal(1);
             res.body.data.should.have.property('accessId');
             user4AccessId = res.body.data.accessId;
             done();
@@ -239,7 +239,7 @@ describe('user3 and user2 accepts User4', function () {
         dbPost.findById(newBobroom._id, function (err, result) {
             request.post('/post/' + newBobroom._id + '/acs/' + user4AccessId).send({ userId: user3._id, vote: true }).expect(200).end(function (err, res) {
                 should.not.exist(err);
-                res.body.success.should.equal(1); // because vote does not finish yet
+                res.body.success.should.equal(1);
                 done();
             });
         });
@@ -249,7 +249,7 @@ describe('user3 and user2 accepts User4', function () {
         dbPost.findById(newBobroom._id, function (err, result) {
             request.post('/post/' + newBobroom._id + '/acs/' + user4AccessId).send({ userId: user2._id, vote: true }).expect(200).end(function (err, res) {
                 should.not.exist(err);
-                res.body.success.should.equal(0); // because of invalid registration id
+                res.body.success.should.equal(1);
                 done();
             });
         });
