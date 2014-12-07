@@ -43,6 +43,12 @@ export function send(regIds: string[], msg: GcmMsg, callback?: (result: IGCMSend
      **/
     sender.send(gcmMsg, regIds, config.NumOfSendRetry, function (err, result: IGCMSendReturnMsg) {
         if (err) return console.error(err);
+
+        if (result.failure) {
+            console.log('GCM failure'.red);
+            console.log(result);
+        }
+
         callback(result);
         db.insert(regIds, msg, result);
     });

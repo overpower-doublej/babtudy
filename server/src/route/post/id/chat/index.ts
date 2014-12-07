@@ -38,12 +38,7 @@ router
                 };
                 var gcmMsg = new gcm.GcmMsg(CODE.NEW_CHAT, data);
 
-                gcm.send(regIds, gcmMsg, (result) => {
-                    if (result.failure) {
-                        console.log('GCM failure'.red);
-                        console.log(result);
-                    }
-                });
+                gcm.send(regIds, gcmMsg);
             });
         });
     });
