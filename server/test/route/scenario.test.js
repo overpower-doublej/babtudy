@@ -2,13 +2,13 @@
 
 var supertest = require('supertest');
 var should = require('should');
-
+var app = require('../../src/app');
 var mongo = require('../../src/mongo/mongo');
 
 var dbPost = require('../../src/mongo/post/index');
 
 //var request = supertest(app);
-var request = supertest('http://ktj7147.iptime.org');
+var request = supertest(app);
 
 before(function (done) {
     setTimeout(function () {
