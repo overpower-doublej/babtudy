@@ -46,7 +46,8 @@ export function send(regIds: string[], msg: GcmMsg, callback?: (result: IGCMSend
         if (err) return console.error(err);
 
         if (result.failure) {
-            console.log('GCM failure'.red);
+            if (process.env.MODE != 'test')
+                console.log('GCM failure'.red);
             console.log(result);
         }
 
