@@ -1,4 +1,5 @@
 ﻿/// <reference path="../../Scripts/typings/node/node.d.ts" />
+/// <reference path="../../Scripts/typings/colors/colors.d.ts" />
 import db = require('../mongo/gcm');
 var gcm = require('node-gcm');
 import configAll = require('../config');
