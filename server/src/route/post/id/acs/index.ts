@@ -12,53 +12,33 @@ import CODE = require('../../../../gcm/pushCode');
 var router = express.Router();
 router
     .post('/', (req, res, next) => {
-        /**
-         * New access. One user wants to join bobroom.
-         * Send votes to users members of bobroom through GCM.
-         * And then if GCM is success, create access and response.
-         */
 
         var post: Post = req['post'];
+
         var userId = req.body.userId;
+
+        // Create new Access object
+        var newAccess = new Access(userId, post);
+        // Insert into db
+        dbPost.access.push(post._id, newAccess, (err, result) => {
+            if (err)
+                res.json({ success: 0, failure: 1 });
+            else
+                res.json({
+                    success: 1,
+                    failure: 0,
+                    data: {
+                        accessId: newAccess._id
+                    }
+                });
+        });
 
         // Find registration id of members of bobroom
         dbUser.findRegIds(post.users, (regIds) => {
             // Create GCM message
             var gcmMsg = new gcm.GcmMsg(CODE.ACCESS_JOIN, { userId: userId });
             // Send GCM
-            gcm.send(regIds, gcmMsg, (result) => {
-                /**
-                 * ########################## DELETE HERE
-                 */
-                result.failure = 0;
-                result.success = 1;
-
-                if (result.failure)
-                    res.json({
-                        success: 0,
-                        failure: 1,
-                        msg: 'GCM fail'
-                    });
-                else if (result.success) {
-                    // Create new Access object
-                    var newAccess = new Access(userId, post);
-                    // Insert into db
-                    dbPost.access.push(post._id, newAccess, (result) => {
-                        res.json({
-                            success: 1,
-                            failure: 0,
-                            data: {
-                                accessId: newAccess._id
-                            }
-                        });
-                    });
-                }
-                else
-                    res.json({
-                        success: 0,
-                        failure: 1
-                    });
-            });
+            gcm.send(regIds, gcmMsg);
         });
     })
     .param('acsId', (req, res, next, acsId: string) => {

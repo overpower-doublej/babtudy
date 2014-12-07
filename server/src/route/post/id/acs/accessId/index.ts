@@ -28,7 +28,10 @@ router
         var vote = req.body['vote'];
 
         // Update vote data
-        dbPost.access.updateVote(post._id, access._id, userId, vote, (result) => {
+        dbPost.access.updateVote(post._id, access._id, userId, vote, (err, result) => {
+            if (err)
+                return res.json({ success: 0, failure: 1 });
+
             // Did everyone vote?
             dbPost.access.findById(post._id, access._id, (access) => {
                 for (var userId in access.votes) {
@@ -37,19 +40,18 @@ router
                     if (vote == null)
                         return res.json({ success: 1, failure: 0, msg: 'Vote did not finish yet' });
                 }
-                // If vote finished, send GCM, and update result on access
+
+                // Vote finished
+                res.json({ success: 1, failure: 0, msg: 'Vote finished' });
+
+                // If vote finished, send GCM
                 dbUser.findRegIds(post.users, (regIds) => {
                     var data = {
                         postId: post._id,
                         acsId: access._id
                     };
                     var gcmMsg = new gcm.GcmMsg(CODE.VOTE_FINISH, data);
-                    gcm.send(regIds, gcmMsg, (result) => {
-                        if (result.success)
-                            res.json({ success: 1, failure: 0, msg: 'Vote finished' });
-                        else if (result.failure)
-                            res.json({ success: 0, failure: 1, msg: 'GCM send failure' });
-                    });
+                    gcm.send(regIds, gcmMsg);
                 });
 
                 // Set vote result

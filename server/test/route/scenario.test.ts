@@ -9,7 +9,8 @@ import Post = schema.Post;
 import dbPost = require('../../src/mongo/post/index');
 import colors = require('colors');
 
-var request = supertest(app);
+//var request = supertest(app);
+var request = supertest('http://ktj7147.iptime.org');
 
 before((done) => {
     setTimeout(() => {

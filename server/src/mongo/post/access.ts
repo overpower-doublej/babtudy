@@ -11,10 +11,9 @@ import Access = schema.Access;
 
 var post: mongodb.Collection;
 
-export function push(postId: ObjectID, access: Access, callback: (result) => void) {
+export function push(postId: ObjectID, access: Access, callback: (err, result) => void) {
     post.update({ _id: postId }, { $push: { accesses: access } }, (err, result) => {
-        if (err) return console.error(err);
-        callback(result);
+        callback(err, result);
     });
 }
 
@@ -60,7 +59,7 @@ export function findById(postId: any, accessId: any, callback: (access: Access) 
 }
 
 
-export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string, vote: boolean, callback: (result) => void) {
+export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string, vote: boolean, callback: (err, result) => void) {
     // Set query
     var selector = {
         _id: postId,
@@ -72,8 +71,7 @@ export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string,
     doc.$set[userVoteKey] = vote;
     // Update
     post.update(selector, doc, { w: 1 }, (err, result) => {
-        if (err) return console.error(err);
-        callback(result);
+        callback(err, result);
     });
 }
 
