@@ -56,6 +56,7 @@
     <Folder Include="src\route\post\id\acs\accessId\" />
     <Folder Include="src\route\post\id\chat\" />
     <Folder Include="src\route\user\id\" />
+    <Folder Include="src\route\user\check\" />
     <Folder Include="test\" />
     <Folder Include="Scripts\" />
     <Folder Include="Scripts\typings\" />
@@ -105,6 +106,7 @@
     <TypeScriptCompile Include="src\route\post\id\chat\index.ts" />
     <TypeScriptCompile Include="src\route\post\id\index.ts" />
     <TypeScriptCompile Include="src\route\post\index.ts" />
+    <TypeScriptCompile Include="src\route\user\check\index.ts" />
     <TypeScriptCompile Include="src\route\user\id\index.ts" />
     <TypeScriptCompile Include="src\route\user\index.ts" />
     <TypeScriptCompile Include="test\mongo\user.spec.ts" />

@@ -9,7 +9,6 @@ import Post = schema.Post;
 import dbPost = require('../../src/mongo/post/index');
 import colors = require('colors');
 
-//var request = supertest(app);
 var request = supertest(app);
 
 before((done) => {
@@ -64,6 +63,17 @@ var user4 = {
 
 describe('Users join', () => {
 
+    it('check if user id "user1" exists', (done) => {
+        request
+            .get('/user/check/' + user1._id)
+            .expect(200)
+            .end((err, res) => {
+                should.not.exist(err);
+                res.body.data.exists.should.equal(0);
+                done();
+            });
+    });
+
     it('POST /user - user1', (done) => {
         request
             .post('/user')
@@ -71,6 +81,17 @@ describe('Users join', () => {
             .expect(200)
             .end((err, res) => {
                 should.not.exist(err);
+                done();
+            });
+    });
+
+    it('user2 check if user id "user1" exists', (done) => {
+        request
+            .get('/user/check/' + user1._id)
+            .expect(200)
+            .end((err, res) => {
+                should.not.exist(err);
+                res.body.data.exists.should.equal(1);
                 done();
             });
     });

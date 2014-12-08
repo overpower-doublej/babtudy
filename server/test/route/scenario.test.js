@@ -7,7 +7,6 @@ var mongo = require('../../src/mongo/mongo');
 
 var dbPost = require('../../src/mongo/post/index');
 
-//var request = supertest(app);
 var request = supertest(app);
 
 before(function (done) {
@@ -61,9 +60,25 @@ var user4 = {
 };
 
 describe('Users join', function () {
+    it('check if user id "user1" exists', function (done) {
+        request.get('/user/check/' + user1._id).expect(200).end(function (err, res) {
+            should.not.exist(err);
+            res.body.data.exists.should.equal(0);
+            done();
+        });
+    });
+
     it('POST /user - user1', function (done) {
         request.post('/user').send(user1).expect(200).end(function (err, res) {
             should.not.exist(err);
+            done();
+        });
+    });
+
+    it('user2 check if user id "user1" exists', function (done) {
+        request.get('/user/check/' + user1._id).expect(200).end(function (err, res) {
+            should.not.exist(err);
+            res.body.data.exists.should.equal(1);
             done();
         });
     });

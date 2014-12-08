@@ -41,15 +41,18 @@ router
     })
 
     .post('/login', (req, res, next) => {
-        var user: User = req.user;
+        var user: User = req['user'];
 
         var pwd = req.body['pwd'];
 
-        db.findById(user._id, (user) => {
+        db.findById(user._id, (err, user) => {
+            if (err)
+                return res.json({ success: 0, failure: 1 });
+
             if (user.pwd == pwd)
-                res.json({ success: 1, failure: 0 });
+                res.json({ success: 1, failure: 0, correct: 1 });
             else if (user.pwd != pwd)
-                res.json({ success: 0, failure: 1, msg: 'Incorrect password' });
+                res.json({ success: 1, failure: 0, correct: 0 });
             else
                 res.json({ success: 0, failure: 1, msg: 'User ID does not exist' });
         });

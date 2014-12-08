@@ -1,5 +1,10 @@
-﻿import mongodb = require('mongodb');
+﻿/// <reference path="../../Scripts/typings/colors/colors.d.ts" />
+/// <reference path="../../Scripts/typings/mongodb/mongodb.d.ts" />
+/// <reference path="../../Scripts/typings/extend/extend.d.ts" />
+
+import mongodb = require('mongodb');
 import extend = require('extend');
+import colors = require('colors');
 import mongo = require('./mongo');
 import ObjectId = mongodb.ObjectID;
 import config = require('../config');
@@ -13,11 +18,14 @@ var collName = 'user';
 var db: mongodb.Db;
 var user: mongodb.Collection;
 
-export function findById(_id: string, callback: (user: User) => void) {
+export function findById(_id: string, callback: (err, user: User) => void) {
     user.findOne({ _id: _id }, (err, result) => {
-        if (err) return console.error(err);
+        if (err) {
+            console.log(colors.red('function findById: %s'), __filename);
+            console.error(err);
+        }
 
-        callback(result);
+        callback(err, result);
     })
 }
 

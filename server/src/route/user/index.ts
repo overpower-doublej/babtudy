@@ -34,11 +34,15 @@ router
     })
 // Parse parameter 'id', insert user data into req.user
     .param('id', (req, res, next, _id) => {
-        db.findById(_id, (user) => {
+        db.findById(_id, (err, user) => {
+            if (err)
+                return res.json({ success: 0, failure: 1 });
+
             req.user = user;
             next();
         });
     })
-    .use('/:id', require('./id/index'));
+    .use('/:id', require('./id/index'))
+    .use('/check', require('./check/index'));
 
 export = router;
