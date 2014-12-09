@@ -162,8 +162,6 @@ describe('User3 create BoBroom', () => {
             .end((err, res) => {
                 should.not.exist(err);
                 res.body.success.should.equal(1);
-                //console.log('# New Post Info'.bold.cyan);
-                //console.log(res.body);
                 done();
             });
     });

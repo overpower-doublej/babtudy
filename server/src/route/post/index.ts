@@ -40,7 +40,7 @@ router
             if (err)
                 res.json({ success: 0, failure: 1, msg: 'Internal server fail' });
             else
-                res.json({ success: 1, failure: 0, data: result });
+                res.json({ success: 1, failure: 0, data: result[0] });
         });
     })
     .param('id', (req, res, next, _id) => {

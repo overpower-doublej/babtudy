@@ -10,7 +10,8 @@ router
     .get('/', (req, res, next) => {
         var user = {
             _id: req.user._id,
-            name: req.user.name
+            name: req.user.name,
+            meetLog: req.user.meetLog
         };
         res.json({ success: 1, failure: 0, data: user });
     })

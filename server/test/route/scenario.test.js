@@ -129,9 +129,6 @@ describe('User3 create BoBroom', function () {
         request.post('/post').send(reqBody).expect(200).end(function (err, res) {
             should.not.exist(err);
             res.body.success.should.equal(1);
-
-            //console.log('# New Post Info'.bold.cyan);
-            //console.log(res.body);
             done();
         });
     });
