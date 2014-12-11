@@ -40,15 +40,14 @@ export function find(callback: (err, results: any[]) => void, sortByPostedDate?:
 
     post.find({},
         {
-            title: 1,
-            date: 1,
-            postedDate: 1,
-            menu: 1,
-            boss: 1
+            users: 0,
+            accesses: 0,
+            chats: 0,
+            attend: 0
         },
         {
             limit: 10,
-            sort: sort
+            sort: [[sort, 'desc']]
         }).toArray((err, results) => {
             if (err) console.error(err);
             callback(err, results);
@@ -71,15 +70,14 @@ export function findWhen(date: Date, callback: (results: any[]) => void, sortByP
 
     post.find(selector,
         {
-            title: 1,
-            date: 1,
-            postedDate: 1,
-            menu: 1,
-            boss: 1
+            users: 0,
+            accesses: 0,
+            chats: 0,
+            attend: 0
         },
         {
             limit: 10,
-            sort: sort
+            sort: [[sort, 'desc']]
         }).toArray((err, results) => {
             if (err) return console.error(err);
             callback(results);
