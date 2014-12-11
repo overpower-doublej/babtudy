@@ -11,8 +11,21 @@ import CODE = require('../../../../gcm/pushCode');
 
 var router = express.Router();
 router
-    .post('/', (req, res, next) => {
+    .get('/', (req, res, next) => {
+        var post: Post = req['post'];
 
+        dbPost.access.find(post._id, (err, accesses) => {
+            if (err)
+                return res.json({ success: 0, failure: 1 });
+
+            res.json({
+                success: 1,
+                failure: 0,
+                data: accesses
+            });
+        });
+    })
+    .post('/', (req, res, next) => {
         var post: Post = req['post'];
 
         var userId = req.body.userId;

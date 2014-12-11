@@ -17,6 +17,40 @@ export function push(postId: ObjectID, access: Access, callback: (err, result) =
     });
 }
 
+export function find(postId: string, callback: (err, accesses: Access[]) => void);
+export function find(postId: ObjectID, callback: (err, accesses: Access[]) => void);
+export function find(postId: any, callback: (err, access: Access[]) => void) {
+    // Check argument
+    if (typeof postId == 'string')
+        postId = new ObjectID(postId);
+    // Set aggregation pipeline stages
+    var stages = [
+        {
+            $match: { _id: postId }
+        },
+        {
+            $project: { _id: 0, accesses: 1 }
+        },
+        {
+            $unwind: '$accesses'
+        },
+        {
+            $project: {
+                _id: '$accesses._id',
+                userId: '$accesses.userId',
+                votes: '$accesses.votes',
+                date: '$accesses.date',
+                result: '$accesses.result'
+            }
+        }
+    ];
+    // Aggregate
+    post.aggregate(stages, (err, results: Access[]) => {
+        if (err) return console.error(err);
+        callback(err, results);
+    });
+}
+
 export function findById(postId: string, accessId: string, callback: (access: Access) => void);
 export function findById(postId: string, accessId: ObjectID, callback: (access: Access) => void);
 export function findById(postId: ObjectID, accessId: string, callback: (access: Access) => void);
