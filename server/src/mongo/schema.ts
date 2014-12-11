@@ -78,6 +78,8 @@ export class User {
         if (typeof data != 'object')
             data = {};
 
+        this.meetLog = [0, 0];
+
         extend(this, data);
     }
 }

@@ -20,7 +20,6 @@ router
         res.json({ success: 1, failure: 0, data: access });
     })
     .post('/', (req, res, next) => {
-        // Update vote
         var post: Post = req['post'];
         var access: Access = req['acs'];
 

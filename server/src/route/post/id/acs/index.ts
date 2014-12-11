@@ -28,7 +28,7 @@ router
     .post('/', (req, res, next) => {
         var post: Post = req['post'];
 
-        var userId = req.body.userId;
+        var userId = req.body['userId'];
 
         // Create new Access object
         var newAccess = new Access(userId, post);
