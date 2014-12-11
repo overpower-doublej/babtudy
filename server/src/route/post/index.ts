@@ -45,6 +45,8 @@ router
     })
     .param('id', (req, res, next, _id) => {
         db.findById(_id, (err, post) => {
+            if (err)
+                return res.json({ success: 0, failure: 1 });
             /**
              * Pass post object to next route handler.
              * Usage: req['post']
