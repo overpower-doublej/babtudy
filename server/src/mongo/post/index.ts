@@ -43,7 +43,8 @@ export function find(callback: (err, results: any[]) => void, sortByPostedDate?:
             title: 1,
             date: 1,
             postedDate: 1,
-            menu: 1
+            menu: 1,
+            boss: 1
         },
         {
             limit: 10,
@@ -73,7 +74,8 @@ export function findWhen(date: Date, callback: (results: any[]) => void, sortByP
             title: 1,
             date: 1,
             postedDate: 1,
-            menu: 1
+            menu: 1,
+            boss: 1
         },
         {
             limit: 10,
