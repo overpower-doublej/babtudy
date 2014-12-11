@@ -90,7 +90,7 @@ export function findById(_id: any, callback: (err, result: Post) => void) {
     if (typeof _id == 'string')
         _id = new ObjectID(_id);
 
-    post.findOne({ _id: _id }, (err, result) => {
+    post.findOne({ _id: _id }, { accesses: 0, chats: 0, attend: 0 }, (err, result) => {
         callback(err, result);
     });
 }
