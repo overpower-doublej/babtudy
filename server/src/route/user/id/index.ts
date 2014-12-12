@@ -51,9 +51,9 @@ router
                 return res.json({ success: 0, failure: 1 });
 
             if (user.pwd == pwd)
-                res.json({ success: 1, failure: 0, correct: 1 });
+                res.json({ success: 1, failure: 0, data: { correct: 1 } });
             else if (user.pwd != pwd)
-                res.json({ success: 1, failure: 0, correct: 0 });
+                res.json({ success: 1, failure: 0, data: { correct: 0 } });
             else
                 res.json({ success: 0, failure: 1, msg: 'User ID does not exist' });
         });
