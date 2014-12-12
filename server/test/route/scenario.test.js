@@ -162,8 +162,8 @@ describe('User1 wants to join User3\'s BoBroom', function () {
 
 describe('User3 denies User1', function () {
     it('POST /post/:postId/acs/:acsId', function (done) {
-        dbPost.findById(newBobroom._id, function (err, result) {
-            request.post('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).send({ userId: user3._id, vote: false }).expect(200).end(function (err, res) {
+        dbPost.access.find(newBobroom._id, function (err, accesses) {
+            request.post('/post/' + newBobroom._id + '/acs/' + accesses[0]._id).send({ userId: user3._id, vote: false }).expect(200).end(function (err, res) {
                 should.not.exist(err);
                 res.body.success.should.equal(1);
                 done();
@@ -172,8 +172,8 @@ describe('User3 denies User1', function () {
     });
 
     it('must have result "false"', function (done) {
-        dbPost.findById(newBobroom._id, function (err, result) {
-            request.get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id).expect(200).end(function (err, res) {
+        dbPost.access.find(newBobroom._id, function (err, accesses) {
+            request.get('/post/' + newBobroom._id + '/acs/' + accesses[0]._id).expect(200).end(function (err, res) {
                 should.not.exist(err);
                 res.body.success.should.equal(1);
                 res.body.data.result.should.equal(false);

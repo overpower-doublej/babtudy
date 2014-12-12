@@ -201,9 +201,9 @@ describe('User1 wants to join User3\'s BoBroom', () => {
 
 describe('User3 denies User1', () => {
     it('POST /post/:postId/acs/:acsId', (done) => {
-        dbPost.findById(newBobroom._id, (err, result) => {
+        dbPost.access.find(newBobroom._id, (err, accesses) => {
             request
-                .post('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id)
+                .post('/post/' + newBobroom._id + '/acs/' + accesses[0]._id)
                 .send({ userId: user3._id, vote: false })
                 .expect(200)
                 .end((err, res) => {
@@ -215,9 +215,9 @@ describe('User3 denies User1', () => {
     });
 
     it('must have result "false"', (done) => {
-        dbPost.findById(newBobroom._id, (err, result) => {
+        dbPost.access.find(newBobroom._id, (err, accesses) => {
             request
-                .get('/post/' + newBobroom._id + '/acs/' + result.accesses[0]._id)
+                .get('/post/' + newBobroom._id + '/acs/' + accesses[0]._id)
                 .expect(200)
                 .end((err, res) => {
                     should.not.exist(err);
