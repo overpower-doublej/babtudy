@@ -37,7 +37,9 @@ router
             // Send GCM to users in bobroom
             dbUser.findRegIds(post.users, (regIds) => {
                 var data = {
-                    postId: post._id
+                    postId: post._id,
+                    userId: userId,
+                    msg: msg
                 };
                 var gcmMsg = new gcm.GcmMsg(CODE.NEW_CHAT, data);
 

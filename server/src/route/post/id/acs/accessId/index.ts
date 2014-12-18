@@ -48,7 +48,7 @@ router
 
                 // Vote finished
                 res.json({ success: 1, failure: 0, msg: 'Vote finished' });
-
+                console.log('point1');
                 // Set vote result
                 dbPost.access.setVoteResult(post._id, access._id, (voteResult) => {
                     console.log(access.userId);
