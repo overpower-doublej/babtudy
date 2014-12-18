@@ -53,7 +53,7 @@ router
                 dbUser.findRegIds(post.users, (regIds) => {
                     var data = {
                         postId: post._id,
-                        acsId: access._id
+                        accessId: access._id
                     };
                     var gcmMsg = new gcm.GcmMsg(CODE.VOTE_FINISH, data);
                     gcm.send(regIds, gcmMsg);
