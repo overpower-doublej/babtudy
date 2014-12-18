@@ -26,6 +26,12 @@ router
         var userId = req.body['userId'];
         var vote = req.body['vote'];
 
+        if (typeof vote != 'boolean') {
+            if (vote == 'false')
+                vote = false;
+            else if (vote == 'true')
+                vote = true;
+        }
         // Update vote data
         dbPost.access.updateVote(post._id, access._id, userId, vote, (err, result) => {
             if (err)
