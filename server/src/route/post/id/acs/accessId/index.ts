@@ -51,6 +51,7 @@ router
 
                 // Set vote result
                 dbPost.access.setVoteResult(post._id, access._id, (voteResult) => {
+                    console.log(access.userId);
                     // If vote finished, send GCM
                     dbUser.findRegIds([access.userId], (regIds) => {
                         var data = {
