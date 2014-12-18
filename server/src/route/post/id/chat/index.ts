@@ -12,6 +12,7 @@ import CODE = require('../../../../gcm/pushCode');
 
 var router = express.Router();
 router
+
     .get('/after/:date', (req, res, next) => {
         var post: Post = req['post'];
 
@@ -22,6 +23,7 @@ router
             res.json({ success: 1, failure: 0, data: result });
         });
     })
+
     .post('/', (req, res, next) => {
         var post: Post = req['post'];
 

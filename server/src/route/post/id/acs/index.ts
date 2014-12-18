@@ -49,7 +49,12 @@ router
         // Find registration id of members of bobroom
         dbUser.findRegIds(post.users, (regIds) => {
             // Create GCM message
-            var gcmMsg = new gcm.GcmMsg(CODE.ACCESS_JOIN, { userId: userId });
+            var data = {
+                userId: userId,
+                accessId: newAccess._id,
+                postId: post._id
+            };
+            var gcmMsg = new gcm.GcmMsg(CODE.ACCESS_JOIN, data);
             // Send GCM
             gcm.send(regIds, gcmMsg);
         });
