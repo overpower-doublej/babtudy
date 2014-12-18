@@ -126,11 +126,8 @@ export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (
         var votes = access.votes;
 
         for (var userId in access.votes) {
-            console.log(votes[userId]);
-            console.log(typeof votes[userId]);
             if (votes[userId] == false) {
                 voteResult = false;
-                console.log('vote result: ' + voteResult);
                 break;
             }
         }
