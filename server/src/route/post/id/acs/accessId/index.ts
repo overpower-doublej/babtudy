@@ -49,18 +49,19 @@ router
                 // Vote finished
                 res.json({ success: 1, failure: 0, msg: 'Vote finished' });
 
-                // If vote finished, send GCM
-                dbUser.findRegIds(post.users, (regIds) => {
-                    var data = {
-                        postId: post._id,
-                        accessId: access._id
-                    };
-                    var gcmMsg = new gcm.GcmMsg(CODE.VOTE_FINISH, data);
-                    gcm.send(regIds, gcmMsg);
-                });
-
                 // Set vote result
-                dbPost.access.setVoteResult(post._id, access._id);
+                dbPost.access.setVoteResult(post._id, access._id, (voteResult) => {
+                    // If vote finished, send GCM
+                    dbUser.findRegIds([access.userId], (regIds) => {
+                        var data = {
+                            postId: post._id,
+                            accessId: access._id,
+                            result: voteResult
+                        };
+                        var gcmMsg = new gcm.GcmMsg(CODE.VOTE_FINISH, data);
+                        gcm.send(regIds, gcmMsg);
+                    });
+                });
             });
         });
     });

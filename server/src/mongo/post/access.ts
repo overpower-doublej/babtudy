@@ -109,7 +109,7 @@ export function updateVote(postId: ObjectID, accessId: ObjectID, userId: string,
     });
 }
 
-export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (result) => void) {
+export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (voteResult) => void) {
     // Check arguments
     if (typeof callback != 'function')
         callback = () => { };
@@ -141,12 +141,12 @@ export function setVoteResult(postId: ObjectID, accessId: ObjectID, callback?: (
             if (voteResult == true) {
                 post.update({ _id: postId }, { $push: { users: access.userId } }, { w: 1 }, (err, result1) => {
                     if (err) return console.error(err);
-                    callback(result1);
+                    callback(voteResult);
                 });
             }
             // Else if vote result is false, just call callback function immediately.
             else if (voteResult == false)
-                callback(result);
+                callback(voteResult);
         });
 
 
